@@ -11,6 +11,10 @@ target/
 *.iws
 *.iml
 *.ipr
+.idea/uiDesigner.xml
+.idea/misc.xml
+.idea/*
+.idea/.*
 
 ### Eclipse ###
 .apt_generated
