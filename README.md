@@ -9,22 +9,7 @@ Formation sur les design patterns en Java.
 - Maven 3.9.9
 - Git 2.46.1
 - IntelliJ IDEA
-- [PlantUML](https://plantuml.com/) 
-
-## Installation
-1. Cloner le projet :
-
-```bash
-git clone
-```
-
-2. Importer le projet dans IntelliJ IDEA :
-3. Installer les dépendances Maven :
-
-```bash
-mvn clean install
-```
-
+- [PlantUML](https://plantuml.com/)
 
 ## Installation
 1. Cloner le projet :
