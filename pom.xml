@@ -53,7 +53,7 @@
                     <archive>
                         <manifest>
                             <!-- Ici le chemin vers la classe qui contient la méthode main -->
-                            <mainClass>com.carlosantunes.Main</mainClass>
+                            <mainClass>com.carlosantunes.Restaurant</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
