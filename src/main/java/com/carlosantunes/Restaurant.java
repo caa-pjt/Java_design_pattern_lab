@@ -1,9 +1,6 @@
 package com.carlosantunes;
 
-import com.carlosantunes.fabrique.CreateurDiet;
-import com.carlosantunes.fabrique.CreateurPlaisir;
-import com.carlosantunes.fabrique.CreateurProduit;
-import com.carlosantunes.fabrique.CreateurVegan;
+import com.carlosantunes.restaurant.fabrique.CreateurProduit;
 import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.Menu;
@@ -23,6 +20,7 @@ public class Restaurant {
     // Patron composite
     private final List<Produit> produits;
 
+    // Patron Abstract Factory
     private final List<Table> tables;
 
     /**
@@ -64,25 +62,35 @@ public class Restaurant {
         tables.add(table);
     }
 
-    public void creerCommande(String Client, String typeTable) {
-        CreateurProduit createur = null;
 
-        switch (typeTable.toLowerCase()) {
-            case "plaisir":
-                createur = new CreateurPlaisir();
-                break;
-            case "diet":
-                createur = new CreateurDiet();
-                break;
-            case "vegan":
-                createur = new CreateurVegan();
-                break;
-            default:
-                System.out.println("Type de table inconnu");
-                return;
+    /**
+     * Méthode pour instancier la fabrique dynamiquement
+     */
+    public CreateurProduit getCreateur(String typeTable) {
+        String packageName = "com.carlosantunes.restaurant.fabrique.";
+        try {
+            Class<?> clazz = Class.forName(packageName + "Createur" + typeTable);
+            return (CreateurProduit) clazz.newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null; // Si la classe n'existe pas ou une erreur survient
+        }
+    }
+
+    /**
+     * Crée une commande pour un client donné et un type de table donné.
+     * @param client
+     * @param typeTable
+     */
+    public void creerCommande(String client, String typeTable) {
+        CreateurProduit createur = getCreateur(typeTable);
+        if (createur == null) {
+            System.out.println("Type de table inconnu");
+            return;
         }
 
-        Table table = new Table(Client, new Date(), typeTable);
+        // Création de la table
+        Table table = new Table(client, new Date(), typeTable);
         Plat plat = createur.creerPlat("Plat du jour", 10.00);
         Boisson boisson = createur.creerBoisson("Eau", 2.00);
         table.ajouterProduit(plat);
@@ -91,20 +99,32 @@ public class Restaurant {
         ajouterTable(table);
     }
 
-    public void affichertables() {
+    /**
+     * Affiche l'ensemble des tables du restaurant.
+     */
+    public void afficherTables() {
+        System.out.println("Tables du restaurant:");
         for (Table table : tables) {
-            System.out.println("Table de " + table.getClient());
+            // System.out.println("Table de " + table.getClient());
             table.afficherProduitsConsommes();
             System.out.println("--------------------");
         }
     }
 
 
+    /**
+     * Affiche l'ensemble des tables du restaurant.
+     */
     public static void main(String[] args) {
         System.out.println("Bienvenue au Restaurant!");
 
         // Création du restaurant
         Restaurant restaurant = new Restaurant();
+
+
+        /*
+            Tache 1: Composite pattern
+            ------------------------------------------------------------------------------------------------------------------
 
         // Création de plats
         Plat entree = new Plat("Salade", 5.50, "entrée");
@@ -136,11 +156,19 @@ public class Restaurant {
 
         // Affichage des produits du restaurant
         restaurant.afficherProduits();
-
-
+*/
+        /*
+            Tache 2: Abstract Factory pattern
+            ------------------------------------------------------------------------------------------------------------------
+        */
 
         // création de commandes pour les factories
+        /*
         restaurant.creerCommande("Alice", "Plaisir");
-        restaurant.affichertables();
+        restaurant.creerCommande("Bob", "Diet");
+         */
+        restaurant.creerCommande("Charlie", "Vegan");
+
+        restaurant.afficherTables();
     }
 }

@@ -1,10 +1,13 @@
-package com.carlosantunes.fabrique;
+package com.carlosantunes.restaurant.fabrique;
 
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.boisson.BoissonGazeuse;
 import com.carlosantunes.restaurant.produit.plat.Plat;
 import com.carlosantunes.restaurant.produit.plat.PlatVegan;
 
+/**
+ * Classe CreateurVegan qui permet de créer des plats et des boissons véganes.
+ */
 public class CreateurVegan implements CreateurProduit {
 
     @Override

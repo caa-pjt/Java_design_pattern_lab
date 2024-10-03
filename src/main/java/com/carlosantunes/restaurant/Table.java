@@ -2,9 +2,11 @@ package com.carlosantunes.restaurant;
 
 import com.carlosantunes.restaurant.produit.Produit;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Table {
     private String client;
@@ -25,13 +27,19 @@ public class Table {
     }
 
     public void afficherProduitsConsommes() {
+        System.out.println("Table de " + client + " (" + Type + ")" + " - " + getDate(date));
         for (Produit produit : produitsConsommes) {
             produit.afficher();
-            System.out.println("--------------------");
         }
     }
 
     public String getClient() {
         return client;
+    }
+
+    public String getDate(Date date) {
+        String pattern = "dd MMMM yyyy HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("fr", "FR"));
+        return simpleDateFormat.format(date);
     }
 }

@@ -1,10 +1,13 @@
-package com.carlosantunes.fabrique;
+package com.carlosantunes.restaurant.fabrique;
 
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.boisson.BoissonAlcoolisee;
 import com.carlosantunes.restaurant.produit.plat.Plat;
 import com.carlosantunes.restaurant.produit.plat.PlatRiche;
 
+/**
+ * Classe CreateurPlaisir qui permet de créer des plats et des boissons riches.
+ */
 public class CreateurPlaisir implements CreateurProduit {
 
     @Override
