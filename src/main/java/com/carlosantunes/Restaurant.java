@@ -1,11 +1,17 @@
 package com.carlosantunes;
 
-import com.carlosantunes.restaurant.produit.Boisson;
+import com.carlosantunes.fabrique.CreateurDiet;
+import com.carlosantunes.fabrique.CreateurPlaisir;
+import com.carlosantunes.fabrique.CreateurProduit;
+import com.carlosantunes.fabrique.CreateurVegan;
+import com.carlosantunes.restaurant.Table;
+import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.Menu;
-import com.carlosantunes.restaurant.produit.Plat;
+import com.carlosantunes.restaurant.produit.plat.Plat;
 import com.carlosantunes.restaurant.produit.Produit;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,15 +20,22 @@ import java.util.List;
  */
 public class Restaurant {
 
+    // Patron composite
     private final List<Produit> produits;
+
+    private final List<Table> tables;
 
     /**
      * Constructeur de la classe Restaurant.
-     * Initialise la liste des produits du restaurant.
+     * Initialise la liste des Produits et des tables du restaurant.
      */
     public Restaurant() {
+        // produits
         this.produits = new ArrayList<>();
+        // Tables
+        this.tables = new ArrayList<>();
     }
+
 
     /**
      * Ajoute un produit à la liste des produits du restaurant.
@@ -32,7 +45,6 @@ public class Restaurant {
     public void ajouterProduit(Produit produit) {
         produits.add(produit);
     }
-
     /**
      * Affiche l'ensemble des produits disponibles dans le restaurant (plats, boissons, menus).
      * Chaque produit appelle sa propre méthode d'affichage via le polymorphisme.
@@ -45,11 +57,49 @@ public class Restaurant {
     }
 
     /**
-     * Méthode principale qui simule le fonctionnement du restaurant.
-     * Crée des plats, boissons et menus, et les ajoute à la liste des produits du restaurant.
      *
-     * @param args Arguments de la ligne de commande.
+     * @param table
      */
+    public void ajouterTable(Table table) {
+        tables.add(table);
+    }
+
+    public void creerCommande(String Client, String typeTable) {
+        CreateurProduit createur = null;
+
+        switch (typeTable.toLowerCase()) {
+            case "plaisir":
+                createur = new CreateurPlaisir();
+                break;
+            case "diet":
+                createur = new CreateurDiet();
+                break;
+            case "vegan":
+                createur = new CreateurVegan();
+                break;
+            default:
+                System.out.println("Type de table inconnu");
+                return;
+        }
+
+        Table table = new Table(Client, new Date(), typeTable);
+        Plat plat = createur.creerPlat("Plat du jour", 10.00);
+        Boisson boisson = createur.creerBoisson("Eau", 2.00);
+        table.ajouterProduit(plat);
+        table.ajouterProduit(boisson);
+
+        ajouterTable(table);
+    }
+
+    public void affichertables() {
+        for (Table table : tables) {
+            System.out.println("Table de " + table.getClient());
+            table.afficherProduitsConsommes();
+            System.out.println("--------------------");
+        }
+    }
+
+
     public static void main(String[] args) {
         System.out.println("Bienvenue au Restaurant!");
 
@@ -86,5 +136,11 @@ public class Restaurant {
 
         // Affichage des produits du restaurant
         restaurant.afficherProduits();
+
+
+
+        // création de commandes pour les factories
+        restaurant.creerCommande("Alice", "Plaisir");
+        restaurant.affichertables();
     }
 }

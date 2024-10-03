@@ -1,23 +1,26 @@
-package com.carlosantunes.restaurant.produit;
+package com.carlosantunes.restaurant.produit.boisson;
+
+import com.carlosantunes.restaurant.produit.Produit;
 
 /**
- * Classe Plat qui représente un plat servi dans le restaurant.
- * Implémente l'interface Produit et doit fournir des détails sur le plat.
+ * Classe Boisson qui représente une boisson servie dans le restaurant.
+ * Implémente l'interface Produit et doit fournir des détails sur la boisson.
  */
-public class Plat implements Produit {
+public class Boisson implements Produit {
 
     private final String nom;
     private final Double prix;
     private final String type;
 
+
     /**
-     * Constructeur de la classe Plat.
+     * Constructeur de la classe Boisson.
      *
-     * @param nom  Le nom du plat.
-     * @param prix Le prix du plat.
-     * @param type Le type du plat (entrée, plat principal, dessert).
+     * @param nom  Le nom de la boisson.
+     * @param prix Le prix de la boisson.
+     * @param type Le type de boisson (froide ou chaude).
      */
-    public Plat(String nom, Double prix, String type) {
+    public Boisson(String nom, Double prix, String type) {
         this.nom = nom;
         this.prix = prix;
         this.type = type;
@@ -40,7 +43,7 @@ public class Plat implements Produit {
 
     @Override
     public void afficher() {
-        System.out.println("Plat " +
+        System.out.println("Boisson " +
                 "nom : '" + getNom() + '\'' +
                 ", type : " + getType() +
                 ", prix : " + getPrix() + " CHF");
