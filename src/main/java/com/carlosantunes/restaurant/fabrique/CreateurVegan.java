@@ -12,11 +12,11 @@ public class CreateurVegan implements CreateurProduit {
 
     @Override
     public Plat creerPlat(String nom, double prix) {
-        return new PlatVegan(nom, prix, "Vegan");
+        return new PlatVegan(nom, prix);
     }
 
     @Override
     public Boisson creerBoisson(String nom, double prix) {
-        return new BoissonGazeuse(nom, prix, "Gazeuse");
+        return new BoissonGazeuse(nom, prix);
     }
 }

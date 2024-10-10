@@ -1,5 +1,6 @@
 package com.carlosantunes.restaurant;
 
+import com.carlosantunes.restaurant.enums.TableType;
 import com.carlosantunes.restaurant.produit.Produit;
 
 import java.text.SimpleDateFormat;
@@ -9,13 +10,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class Table {
-    private String client;
-    private Date date;
-    private String Type;
+    private final String client;
+    private final Date date;
+    private final TableType Type;
 
-    private List<Produit> produitsConsommes;
+    private final List<Produit> produitsConsommes;
 
-    public Table(String client, Date date, String type) {
+    public Table(String client, Date date, TableType type) {
         this.client = client;
         this.date = date;
         this.Type = type;

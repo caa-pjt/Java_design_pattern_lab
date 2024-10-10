@@ -1,5 +1,6 @@
 package com.carlosantunes.restaurant.produit.plat;
 
+import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.produit.Produit;
 
 /**
@@ -10,7 +11,7 @@ public class Plat implements Produit {
 
     private final String nom;
     private final Double prix;
-    private final String type;
+    private final PlatType type;
 
     /**
      * Constructeur de la classe Plat.
@@ -19,7 +20,7 @@ public class Plat implements Produit {
      * @param prix Le prix du plat.
      * @param type Le type du plat (entrée, plat principal, dessert).
      */
-    public Plat(String nom, Double prix, String type) {
+    public Plat(String nom, Double prix, PlatType type) {
         this.nom = nom;
         this.prix = prix;
         this.type = type;
@@ -37,7 +38,7 @@ public class Plat implements Produit {
 
     @Override
     public String getType() {
-        return type;
+        return type.getType();
     }
 
     @Override

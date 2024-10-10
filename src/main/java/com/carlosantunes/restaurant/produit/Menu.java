@@ -1,5 +1,7 @@
 package com.carlosantunes.restaurant.produit;
 
+import com.carlosantunes.restaurant.enums.MenuType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import java.util.List;
 public class Menu implements Produit{
 
     private final String nom;
+    private final MenuType type;
     private final List<Produit> produits = new ArrayList<>();
 
     /**
@@ -18,8 +21,10 @@ public class Menu implements Produit{
      *
      * @param nom Le nom du menu.
      */
-    public Menu(String nom) {
+    public Menu(String nom, MenuType type) {
+
         this.nom = nom;
+        this.type = type;
     }
 
     /**
@@ -52,7 +57,7 @@ public class Menu implements Produit{
 
     @Override
     public String getType() {
-        return "Menu";
+        return type.getDescription();
     }
 
     /**

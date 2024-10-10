@@ -12,12 +12,12 @@ public class CreateurPlaisir implements CreateurProduit {
 
     @Override
     public Plat creerPlat(String nom, double prix) {
-        return new PlatRiche(nom, prix, "Riche");
+        return new PlatRiche(nom, prix);
     }
 
     @Override
     public Boisson creerBoisson(String nom, double prix) {
-        return new BoissonAlcoolisee(nom, prix, "Alcoolisée");
+        return new BoissonAlcoolisee(nom, prix);
     }
 
 }
