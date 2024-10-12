@@ -81,6 +81,15 @@ public class Restaurant {
 
 
     /**
+     * Utilisé pour les tests unitaires, retourne les produits du restaurant sous forme de liste.
+     *
+     * @return Liste des produits du restaurant.
+     */
+    public List<Produit> getProduits() {
+        return produits;
+    }
+
+    /**
      * Méthode principale du programme.
      * Crée un restaurant et effectue les tâches demandées.
      */
