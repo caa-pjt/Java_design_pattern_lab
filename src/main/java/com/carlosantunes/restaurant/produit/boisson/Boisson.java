@@ -1,4 +1,7 @@
-package com.carlosantunes.restaurant.produit;
+package com.carlosantunes.restaurant.produit.boisson;
+
+import com.carlosantunes.restaurant.enums.BoissonType;
+import com.carlosantunes.restaurant.produit.Produit;
 
 /**
  * Classe Boisson qui représente une boisson servie dans le restaurant.
@@ -8,7 +11,7 @@ public class Boisson implements Produit {
 
     private final String nom;
     private final Double prix;
-    private final String type;
+    private final BoissonType type;
 
 
     /**
@@ -18,7 +21,7 @@ public class Boisson implements Produit {
      * @param prix Le prix de la boisson.
      * @param type Le type de boisson (froide ou chaude).
      */
-    public Boisson(String nom, Double prix, String type) {
+    public Boisson(String nom, Double prix, BoissonType type) {
         this.nom = nom;
         this.prix = prix;
         this.type = type;
@@ -36,7 +39,8 @@ public class Boisson implements Produit {
 
     @Override
     public String getType() {
-        return type;
+
+        return type.getType();
     }
 
     @Override
