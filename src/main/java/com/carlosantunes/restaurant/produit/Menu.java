@@ -73,4 +73,13 @@ public class Menu implements Produit{
         System.out.println("Le prix du " + getNom() + " est de : " + getPrix() + " CHF");
     }
 
+    /**
+     * Retourne la liste des produits du menu.
+     *
+     * @return La liste des produits du menu.
+     */
+    public List<Produit> getProduits() {
+        return produits;
+    }
+
 }

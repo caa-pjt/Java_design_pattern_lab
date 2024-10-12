@@ -23,10 +23,18 @@ public class Table {
         produitsConsommes = new ArrayList<>();
     }
 
+    /**
+     * Ajoute un produit consommé à la table
+     *
+     * @param produit le produit consommé
+     */
     public void ajouterProduit(Produit produit) {
         produitsConsommes.add(produit);
     }
 
+    /**
+     * Affiche les produits consommés par la table
+     */
     public void afficherProduitsConsommes() {
         System.out.println("Table de " + client + " (" + Type + ")" + " - " + getDate(date));
         for (Produit produit : produitsConsommes) {
@@ -34,6 +42,9 @@ public class Table {
         }
     }
 
+    /**
+     * @return le client de la table
+     */
     public String getClient() {
         return client;
     }
@@ -42,5 +53,12 @@ public class Table {
         String pattern = "dd MMMM yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("fr", "FR"));
         return simpleDateFormat.format(date);
+    }
+
+    /**
+     * @return la liste des produits consommés par table
+     */
+    public List<Produit> getProduitsConsommes() {
+        return produitsConsommes;
     }
 }
