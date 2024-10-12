@@ -1,10 +1,10 @@
 package com.carlosantunes;
 
+import com.carlosantunes.restaurant.TableFactory;
 import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.enums.MenuType;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.enums.TableType;
-import com.carlosantunes.restaurant.fabrique.CreateurPlaisir;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
 import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
@@ -15,6 +15,7 @@ import com.carlosantunes.restaurant.produit.Produit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * La classe Restaurant représente un restaurant qui gère une liste de produits (plats, boissons, menus).
@@ -25,7 +26,7 @@ public class Restaurant {
     // Patron composite
     private final List<Produit> produits;
 
-    // Patron Abstract Factory
+    // Patron Factory et Abstract Factory
     private final List<Table> tables;
 
     /**
@@ -60,48 +61,11 @@ public class Restaurant {
     }
 
     /**
-     *
-     * @param table
+     * Ajoute une table à la liste des tables du restaurant.
+     * @param table La table à ajouter
      */
     public void ajouterTable(Table table) {
         tables.add(table);
-    }
-
-
-    /**
-     * Méthode pour instancier la fabrique dynamiquement
-     */
-    public CreateurProduit getCreateur(TableType typeTable) {
-        String packageName = "com.carlosantunes.restaurant.fabrique.";
-        try {
-            Class<?> clazz = Class.forName(packageName + "Createur" + typeTable);
-            return (CreateurProduit) clazz.newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null; // Si la classe n'existe pas ou une erreur survient
-        }
-    }
-
-    /**
-     * Crée une commande pour un client donné et un type de table donné.
-     * @param client
-     * @param typeTable
-     */
-    public void creerCommande(String client, TableType typeTable) {
-        CreateurProduit createur = getCreateur(typeTable);
-        if (createur == null) {
-            System.out.println("Type de table inconnu");
-            return;
-        }
-
-        // Création de la table
-        Table table = new Table(client, new Date(), typeTable);
-        Plat plat = createur.creerPlat("Plat du jour", 10.00);
-        Boisson boisson = createur.creerBoisson("Eau", 2.00);
-        table.ajouterProduit(plat);
-        table.ajouterProduit(boisson);
-
-        ajouterTable(table);
     }
 
     /**
@@ -117,7 +81,8 @@ public class Restaurant {
 
 
     /**
-     * Affiche l'ensemble des tables du restaurant.
+     * Méthode principale du programme.
+     * Crée un restaurant et effectue les tâches demandées.
      */
     public static void main(String[] args) {
         System.out.println("Bienvenue au Restaurant!");
@@ -140,6 +105,7 @@ public class Restaurant {
     private static void tache1(Restaurant restaurant) {
 
 
+        System.out.println("----------------------------------------");
         System.out.println("Tâche 1: Composite pattern :");
         System.out.println("----------------------------------------");
 
@@ -182,26 +148,83 @@ public class Restaurant {
      */
     private static void tache2(Restaurant restaurant) {
 
-
+        System.out.println("----------------------------------------");
         System.out.println("Tâche 2: Abstract Factory pattern :");
         System.out.println("----------------------------------------");
 
-        // création de commandes pour les factories
-        /*
-            restaurant.creerCommande("Alice", "Plaisir");
-            restaurant.creerCommande("Bob", "Diet");
-         */
-        // restaurant.creerCommande("Charlie", "Vegan");
-        // restaurant.afficherTables();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Entrez le nom du client:");
+        String client = scanner.nextLine();
 
-        CreateurProduit plaisir = new CreateurPlaisir();
-        Plat plat = plaisir.creerPlat("Entrecôte", 10.00);
-        Boisson boisson = plaisir.creerBoisson("Vin", 5.00);
+        // Demande du type de table au client et vérification de la validité du type
+        TableType typeTable = null;
+        while (typeTable == null) {
+            try {
+                System.out.println("Entrez le type de table (PLAISIR, DIET, VEGAN):");
+                typeTable = TableType.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Type de table invalide. Veuillez entrer PLAISIR, DIET ou VEGAN.");
+            }
+        }
 
-        Table table = new Table("Alice", new Date(), TableType.PLAISIR);
+        // Utilisation de la fabrique pour choisir le type de table
+        CreateurProduit createurType = TableFactory.createTable(typeTable);
+
+        // Création de la table
+        Table table = new Table(client, new Date(), typeTable);
+
+        // Demande des détails du plat
+        String[] detailsPlat = commanderProduit("plat");
+        String nomPlat = detailsPlat[0];
+        double prixPlat = Double.parseDouble(detailsPlat[1]);
+
+        // Demande des détails de la boisson
+        String[] detailsBoisson = commanderProduit("boisson");
+        String nomBoisson = detailsBoisson[0];
+        double prixBoisson = Double.parseDouble(detailsBoisson[1]);
+
+        // Création des produits à partir des entrées utilisateur et du type de table
+        Plat plat = createurType.creerPlat(nomPlat, prixPlat);
+        Boisson boisson = createurType.creerBoisson(nomBoisson, prixBoisson);
+
+        // Ajout des produits à la table
         table.ajouterProduit(plat);
         table.ajouterProduit(boisson);
+
+        // Ajout de la table au restaurant et affichage
         restaurant.ajouterTable(table);
         restaurant.afficherTables();
     }
+
+
+
+    /**
+     * Demande à l'utilisateur le nom et le prix d'un produit.
+     *
+     * @param typeProduit Le type de produit (ex: "plat", "boisson")
+     * @return Un tableau de String contenant le nom et le prix du produit.
+     */
+    private static String[] commanderProduit(String typeProduit) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Demande du nom du produit
+        System.out.println("Entrez le nom du " + typeProduit + " commandé:");
+        String nom = "";
+        while (nom.isEmpty()) {
+            nom = scanner.nextLine();
+        }
+
+        // Demande du prix du produit
+        System.out.println("Entrez le prix du " + typeProduit + " commandé:");
+        String prixString = "";
+        while (prixString.isEmpty()) {
+            prixString = scanner.nextLine();
+        }
+
+        // Remplacer les virgules par des points pour les nombres décimaux
+        prixString = prixString.replace(',', '.');
+
+        return new String[]{nom, prixString};
+    }
+
 }
