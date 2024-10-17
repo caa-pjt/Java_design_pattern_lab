@@ -49,6 +49,11 @@ public class Table {
         return client;
     }
 
+    /**
+     * @return la date de la table
+     */
+    public TableType getTableType() { return Type; }
+
     public String getDate(Date date) {
         String pattern = "dd MMMM yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("fr", "FR"));
