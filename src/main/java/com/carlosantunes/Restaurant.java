@@ -93,38 +93,6 @@ public class Restaurant {
     }
 
 
-    // ======================================== Tâche 3: Singleton pattern ========================================
-
-    /**
-     * Clôture une table en calculant le montant total de la table.
-     *
-     * @param table La table à clôturer
-     */
-    public void cloturerTable(Table table) {
-       double montantTotalAddition = 0;
-       for (Produit produit : table.getProduitsConsommes()) {
-           montantTotalAddition += produit.getPrix();
-       }
-
-         // Ajout de la table clôturée à la recette
-        Recette.getInstance().ajouterTableCloturee(
-                table.getClient(),
-                table.getDate(),
-                table.getTableType(),
-                montantTotalAddition
-        );
-
-        // Affichage de l'addition
-        System.out.println("Table de " + table.getClient() + " clôturée avec un montant total de " + montantTotalAddition + " CHF.");
-    }
-
-    /**
-     * Affiche les statistiques des tables clôturées.
-     */
-    public void afficherRecette() {
-        Recette.getInstance().afficherStatistiques();
-    }
-
 
     /**
      * Méthode principale du programme.
@@ -147,7 +115,7 @@ public class Restaurant {
 
 
         // Tache 1 : Singleton pattern
-        tache3(restaurant);
+        tache3();
     }
 
     /*
@@ -158,18 +126,18 @@ public class Restaurant {
             3. Clôture des tables
             4. Affichage des statistiques
      */
-    private static void tache3(Restaurant restaurant) {
+    private static void tache3() {
         Table table1 = new Table("Alice", new Date(), TableType.VEGAN);
         table1.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
         table1.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
-        restaurant.cloturerTable(table1);
+        Recette.getInstance().cloturerTable(table1);
 
         Table table2 = new Table("Bob", new Date(), TableType.PLAISIR);
         table2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
         table2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
-        restaurant.cloturerTable(table2);
+        Recette.getInstance().cloturerTable(table2);
 
-        restaurant.afficherRecette();
+        Recette.getInstance().afficherStatistiques();
 
     }
 

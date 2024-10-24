@@ -36,7 +36,7 @@ public class Table {
      * Affiche les produits consommés par la table
      */
     public void afficherProduitsConsommes() {
-        System.out.println("Table de " + client + " (" + Type + ")" + " - " + getDate(date));
+        System.out.println("Table de " + client + " (" + Type + ")" + " - " + getDate());
         for (Produit produit : produitsConsommes) {
             produit.afficher();
         }
@@ -54,14 +54,19 @@ public class Table {
      */
     public TableType getTableType() { return Type; }
 
-    public String getDate(Date date) {
+    public String getDate() {
         String pattern = "dd MMMM yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("fr", "FR"));
         return simpleDateFormat.format(date);
     }
 
-    public Date getDate() {
-        return date;
+
+    public double getMontant() {
+        double montant = 0;
+        for (Produit produit : produitsConsommes) {
+            montant += produit.getPrix();
+        }
+        return montant;
     }
 
     /**

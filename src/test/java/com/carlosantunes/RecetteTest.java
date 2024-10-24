@@ -15,13 +15,11 @@ import static org.junit.Assert.*;
 
 public class RecetteTest {
 
-    private Restaurant restaurant;
     private Table table;
 
 
     @Before
     public void setUp() {
-        restaurant = new Restaurant();
         table = new Table("Lucien", new Date(), TableType.PLAISIR);
     }
 
@@ -47,8 +45,8 @@ public class RecetteTest {
         // Ajouter des produits et clôturer la table
         Plat plat = new Plat("Pâtes", 12.50, PlatType.RICHE);
         table.ajouterProduit(plat);
-        restaurant.cloturerTable(table);
-        Recette.TableCloturee table = Recette.getInstance().listeTablesCloturees().stream().findFirst().orElseThrow();
+        Recette.getInstance().cloturerTable(table);
+        Table table = Recette.getInstance().listeTablesCloturees().stream().findFirst().orElseThrow();
         assertEquals(12.50, table.getMontant(), 0.01);
     }
 

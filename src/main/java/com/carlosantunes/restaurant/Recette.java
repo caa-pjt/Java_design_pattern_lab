@@ -1,9 +1,6 @@
 package com.carlosantunes.restaurant;
 
-import com.carlosantunes.restaurant.enums.TableType;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,60 +11,73 @@ import java.util.List;
  */
 public final class Recette {
 
-    private static Recette instance = null;
+    // volatile = valeur qui peut être modifiée de manière asynchrone par plusieurs threads
+    private static volatile Recette instance = null;
 
     // Liste pour stocker les tables clôturées
-    private final List<TableCloturee> tablesCloturees;
+    private final List<Table> tablesCloturees;
 
     private Recette() {
         this.tablesCloturees = new ArrayList<>();
     }
 
-    public synchronized static Recette getInstance() {
-        if (Recette.instance == null) {
-            Recette.instance = new Recette();
+    public static Recette getInstance() {
+        if (instance == null) {
+            synchronized (Recette.class) {
+                if (instance == null) {
+                    instance = new Recette();
+                }
+            }
         }
-        return Recette.instance;
+        return instance;
     }
 
-    /**
-     * Ajoute une table clôturée à la recette.
-     *
-     * @param client Le nom du client
-     * @param date La date de la table
-     * @param type Le type de table
-     * @param montant Le montant total de l'addition
-     */
-    public void ajouterTableCloturee(String client, Date date, TableType type, double montant) {
-        TableCloturee table = new TableCloturee(client, date, type, montant);
-        tablesCloturees.add(table);
+    public void cloturerTable(Table table) {
+        synchronized (this) {
+            tablesCloturees.add(table);
+            System.out.println("Table clôturée pour le client " + table.getClient() + " avec un montant de " + table.getMontant() + " CHF.");
+        }
     }
+
+    public double getRecetteTotal() {
+        double total = 0;
+        synchronized (this) {
+            for (Table table : tablesCloturees) {
+                total += table.getMontant();
+            }
+        }
+        return total;
+    }
+
 
     /**
      * Affiche les statistiques des tables clôturées.
      */
     public void afficherStatistiques() {
-        double total = 0;
         System.out.println("Statistiques des tables clôturées :");
-        for (TableCloturee table : tablesCloturees) {
-            System.out.println(
-                    "Client: " + table.getClient() +
-                    ", Date: " + table.getDate() +
-                    ", Type: " + table.getType() +
-                    ", Montant: " + table.getMontant() + " CHF."
-            );
-            total += table.getMontant();
+        synchronized (this) {
+            for (Table table : tablesCloturees) {
+                System.out.println(
+                        "Client: " + table.getClient() +
+                        ", Date: " + table.getDate() +
+                        ", Type: " + table.getTableType() +
+                        ", Montant: " + table.getMontant() + " CHF."
+                );
+            }
+            System.out.println("Total des recettes : " + getRecetteTotal() + " CHF.");
         }
-        System.out.println("Total des recettes : " + total + " CHF.");
+
     }
 
     /**
-     * Retourne la liste des tables clôturées.
+     * Cette méthode est utilisée pour les tests.
      *
      * @return La liste des tables clôturées
      */
-    public List<TableCloturee> listeTablesCloturees() {
-        return this.tablesCloturees;
+    public List<Table> listeTablesCloturees() {
+        synchronized (this) {
+            return new ArrayList<>(tablesCloturees); // Retourne une copie pour éviter toute modification externe
+        }
     }
 
     /**
@@ -75,41 +85,8 @@ public final class Recette {
      * Cette méthode est utilisée pour les tests.
      */
     public void viderRecette() {
-        this.tablesCloturees.clear();
-    }
-
-    /**
-     * Classe interne pour stocker les tables clôturées.
-     * Chaque table clôturée est composée du nom du client, de la date, du type de table et du montant total de l'addition.
-     * Cette classe est publique, car elle est utilisée que par la classe Recette et pour les tests.
-     */
-    public static class TableCloturee {
-        private final String client;
-        private final Date date;
-        private final TableType type;
-        private final double montant;
-
-        public TableCloturee(String client, Date date, TableType type, double montant) {
-            this.client = client;
-            this.date = date;
-            this.type = type;
-            this.montant = montant;
-        }
-
-        public String getClient() {
-            return client;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public TableType getType() {
-            return type;
-        }
-
-        public double getMontant() {
-            return montant;
+        synchronized (this) {
+            tablesCloturees.clear();
         }
     }
 }
