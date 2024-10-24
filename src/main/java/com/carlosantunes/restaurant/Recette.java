@@ -62,11 +62,28 @@ public final class Recette {
     }
 
     /**
+     * Retourne la liste des tables clôturées.
+     *
+     * @return La liste des tables clôturées
+     */
+    public List<TableCloturee> listeTablesCloturees() {
+        return this.tablesCloturees;
+    }
+
+    /**
+     * Vide la recette.
+     * Cette méthode est utilisée pour les tests.
+     */
+    public void viderRecette() {
+        this.tablesCloturees.clear();
+    }
+
+    /**
      * Classe interne pour stocker les tables clôturées.
      * Chaque table clôturée est composée du nom du client, de la date, du type de table et du montant total de l'addition.
-     * Cette classe est privée, car uniquement utilisée que par la classe Recette.
+     * Cette classe est publique, car elle est utilisée que par la classe Recette et pour les tests.
      */
-    private static class TableCloturee {
+    public static class TableCloturee {
         private final String client;
         private final Date date;
         private final TableType type;

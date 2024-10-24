@@ -1,6 +1,7 @@
 package com.carlosantunes;
 
 
+import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.TableFactory;
 import com.carlosantunes.restaurant.enums.BoissonType;
@@ -21,6 +22,7 @@ public class RestaurantStepDefinitions {
     private Restaurant restaurant;
     private Menu menu;
     private Table table;
+    private Table table2;
 
 
     @Given("un restaurant vide")
@@ -122,4 +124,70 @@ public class RestaurantStepDefinitions {
         // Comparer avec la valeur de getType() au lieu du nom de l'enum
         Assert.assertEquals(typePlat, plat.getType());
     }
+
+    @Given("le restaurant a une table avec le client {string} et des produits")
+    public void le_restaurant_a_une_table_avec_le_client_et_des_produits(String client) {
+        restaurant = new Restaurant();
+        table = new Table(client, new Date(), TableType.PLAISIR);
+        table.ajouterProduit(new Plat("Pâtes", 12.50, PlatType.RICHE));
+        table.ajouterProduit(new Boisson("Vin", 8.00, BoissonType.ALCOOLISEE));
+    }
+
+    @When("la table est clôturée")
+    public void laTableEstCloturee() {
+        restaurant.cloturerTable(table);
+    }
+
+    @Then("la recette doit contenir une table pour le client {string} avec un montant total de {double} CHF.")
+    public void laRecetteDoitContenirUneTablePourLeClientAvecUnMontantTotalDe(String name, double montant) {
+        // Recette.getInstance().afficherStatistiques();
+
+        // Montant de la dernière table clôturée
+        Recette.TableCloturee tableCloturee =
+                Recette.getInstance().listeTablesCloturees().stream().filter(table -> table.getClient().equals(name)).findFirst().orElseThrow();
+        Assert.assertEquals(montant, tableCloturee.getMontant(), 0.01);
+    }
+
+    @Given("le restaurant a deux tables avec les clients {string} et {string}")
+    public void le_restaurant_a_deux_tables_avec_les_clients_et(String client1, String client2) {
+        restaurant = new Restaurant();
+
+        Recette.getInstance().viderRecette(); // Vide la recette avant de commencer
+
+        // Première table
+        table = new Table(client1, new Date(), TableType.PLAISIR);
+        table.ajouterProduit(new Plat("Pâtes", 12.50, PlatType.RICHE));
+        table.ajouterProduit(new Boisson("Vin", 8.00, BoissonType.ALCOOLISEE));
+
+        // Deuxième table
+        table2 = new Table(client2, new Date(), TableType.VEGAN);
+        table2.ajouterProduit(new Plat("Salade", 7.00, PlatType.VEGAN));
+        table2.ajouterProduit(new Boisson("Eau", 3.50, BoissonType.GAZEUSE));
+
+    }
+
+    @When("les tables sont clôturées")
+    public void lesTablesSontCloturees() {
+        restaurant.cloturerTable(table);
+        restaurant.cloturerTable(table2);
+    }
+
+    @Then("le restaurant doit avoir {int} tables clôturées")
+    public void leRestaurantDoitAvoirTablesCloturees(int nbrTablesCloturees) {
+        Assert.assertEquals(nbrTablesCloturees, Recette.getInstance().listeTablesCloturees().size());
+    }
+
+
+    @Then("les recettes totales doivent être {double} CHF.")
+    public void lesRecettesTotalesDoiventEtreCHF(double totalAttendu) {
+        double totalRecettes = 0;
+        for (Recette.TableCloturee table : Recette.getInstance().listeTablesCloturees()) {
+            totalRecettes += table.getMontant();
+        }
+
+        // Comparer les doubles avec une précision de 0.01
+        Assert.assertEquals(totalAttendu, totalRecettes, 0.01);
+
+    }
+
 }
