@@ -1,5 +1,6 @@
 package com.carlosantunes;
 
+import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.TableFactory;
 import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.enums.MenuType;
@@ -41,6 +42,7 @@ public class Restaurant {
     }
 
 
+    // ======================================== Tâche 1: Composite pattern ========================================
     /**
      * Ajoute un produit à la liste des produits du restaurant.
      *
@@ -61,6 +63,17 @@ public class Restaurant {
     }
 
     /**
+     * Utilisé pour les tests unitaires, retourne les produits du restaurant sous forme de liste.
+     *
+     * @return Liste des produits du restaurant.
+     */
+    public List<Produit> getProduits() {
+        return produits;
+    }
+
+
+    // ======================================== Tâche 2: Abstract Factory pattern ========================================
+    /**
      * Ajoute une table à la liste des tables du restaurant.
      * @param table La table à ajouter
      */
@@ -80,14 +93,38 @@ public class Restaurant {
     }
 
 
+    // ======================================== Tâche 3: Singleton pattern ========================================
+
     /**
-     * Utilisé pour les tests unitaires, retourne les produits du restaurant sous forme de liste.
+     * Clôture une table en calculant le montant total de la table.
      *
-     * @return Liste des produits du restaurant.
+     * @param table La table à clôturer
      */
-    public List<Produit> getProduits() {
-        return produits;
+    public void cloturerTable(Table table) {
+       double montantTotalAddition = 0;
+       for (Produit produit : table.getProduitsConsommes()) {
+           montantTotalAddition += produit.getPrix();
+       }
+
+         // Ajout de la table clôturée à la recette
+        Recette.getInstance().ajouterTableCloturee(
+                table.getClient(),
+                table.getDate(),
+                table.getTableType(),
+                montantTotalAddition
+        );
+
+        // Affichage de l'addition
+        System.out.println("Table de " + table.getClient() + " clôturée avec un montant total de " + montantTotalAddition + " CHF.");
     }
+
+    /**
+     * Affiche les statistiques des tables clôturées.
+     */
+    public void afficherRecette() {
+        Recette.getInstance().afficherStatistiques();
+    }
+
 
     /**
      * Méthode principale du programme.
@@ -102,10 +139,38 @@ public class Restaurant {
 
 
         // Tache 1: Composite pattern
-        tache1(restaurant);
+        //tache1(restaurant);
 
         // Tache 2: Abstract Factory pattern
-        tache2(restaurant);
+        //tache2(restaurant);
+
+
+
+        // Tache 1 : Singleton pattern
+        tache3(restaurant);
+    }
+
+    /*
+        Tâche 3 : Singleton pattern
+
+            1. Création de tables pour le restaurant
+            2. Ajout de produits aux tables
+            3. Clôture des tables
+            4. Affichage des statistiques
+     */
+    private static void tache3(Restaurant restaurant) {
+        Table table1 = new Table("Alice", new Date(), TableType.VEGAN);
+        table1.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
+        table1.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
+        restaurant.cloturerTable(table1);
+
+        Table table2 = new Table("Bob", new Date(), TableType.PLAISIR);
+        table2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
+        table2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
+        restaurant.cloturerTable(table2);
+
+        restaurant.afficherRecette();
+
     }
 
     /*

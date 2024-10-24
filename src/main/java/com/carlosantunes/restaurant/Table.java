@@ -60,6 +60,10 @@ public class Table {
         return simpleDateFormat.format(date);
     }
 
+    public Date getDate() {
+        return date;
+    }
+
     /**
      * @return la liste des produits consommés par table
      */
