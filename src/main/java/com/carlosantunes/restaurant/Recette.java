@@ -5,8 +5,9 @@ import java.util.List;
 
 /**
  * La classe Recette est un singleton. Elle permet de sauvegarder toutes les tables clôturées avec :
- * La date,
- * Le type de client,
+ * La date de la clôture,
+ * Le client,
+ * Le type de table,
  * Le montant de l'addition.
  */
 public final class Recette {
@@ -21,6 +22,11 @@ public final class Recette {
         this.tablesCloturees = new ArrayList<>();
     }
 
+    /**
+     * Méthode pour obtenir l'instance de la recette.
+     *
+     * @return L'instance de la recette.
+     */
     public static Recette getInstance() {
         if (instance == null) {
             synchronized (Recette.class) {
@@ -32,6 +38,11 @@ public final class Recette {
         return instance;
     }
 
+    /**
+     * Clôture une table et ajoute les informations à la liste des tables clôturées.
+     *
+     * @param table La table à clôturer.
+     */
     public void cloturerTable(Table table) {
         synchronized (this) {
             tablesCloturees.add(table);
@@ -39,6 +50,9 @@ public final class Recette {
         }
     }
 
+    /**
+     * @return Le montant total des recettes.
+     */
     public double getRecetteTotal() {
         double total = 0;
         synchronized (this) {
@@ -69,9 +83,10 @@ public final class Recette {
 
     }
 
+
+    // ============== Méthodes utilisées pour les test unitaires ===========================
+
     /**
-     * Cette méthode est utilisée pour les tests.
-     *
      * @return La liste des tables clôturées
      */
     public List<Table> listeTablesCloturees() {
@@ -82,7 +97,6 @@ public final class Recette {
 
     /**
      * Vide la recette.
-     * Cette méthode est utilisée pour les tests.
      */
     public void viderRecette() {
         synchronized (this) {
