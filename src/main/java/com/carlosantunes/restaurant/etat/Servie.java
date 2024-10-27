@@ -3,42 +3,37 @@ package com.carlosantunes.restaurant.etat;
 import com.carlosantunes.restaurant.Table;
 
 public class Servie extends TableState {
-    private static Servie instance;
 
-    private Servie(Table table) {
+    public Servie(Table table) {
         super(table);
-    }
-
-    public static Servie getInstance(Table table) {
-        if (instance == null) {
-            instance = new Servie(table);
-        }
-        return instance;
     }
 
     @Override
     public TableState accueillirClient() {
-        System.out.println("La table à déjà accueilli les clients.");
+        System.out.println("Erreur : Impossible d'accueillir un client. La table est déjà occupée.");
+        System.out.println("----------------------------------------");
         return this;
     }
 
     @Override
     public TableState servirProduits() {
-
-        for (int i = 0; i < 3; i++) {
-            System.out.println("Ici, il y a des produits à servir." + i);
-        }
+        System.out.println("Les produits sont servis :");
+        table.afficherProduitsConsommes();
+        System.out.println("----------------------------------------");
         return this;
     }
 
     @Override
     public TableState fermer() {
-        System.out.println("La table est clôturée.");
-        return Cloturer.getInstance(table);
+        System.out.println("Le client a fini de consommer il demande l'addition : " + table.getMontant() + " CHF. La table passe à l'état clôturée.");
+        System.out.println("----------------------------------------");
+        return new Cloturer(table);
     }
 
     @Override
     public void afficher() {
-        System.out.println("La table a été servie et attend d'être clôturée.");
+        System.out.println("Le client est en train de consommer à la table " + table.getClient() + " (" + table.getTableType() + ")");
+        System.out.println("----------------------------------------");
+
     }
 }

@@ -1,6 +1,8 @@
 package com.carlosantunes.restaurant;
 
 import com.carlosantunes.restaurant.enums.TableType;
+import com.carlosantunes.restaurant.etat.Reserver;
+import com.carlosantunes.restaurant.etat.TableState;
 import com.carlosantunes.restaurant.produit.Produit;
 
 import java.text.SimpleDateFormat;
@@ -16,11 +18,20 @@ public class Table {
 
     private final List<Produit> produitsConsommes;
 
+    /**
+     * État courant de la table | pattern State pour gérer l'état de la table
+     * @see com.carlosantunes.restaurant.etat.TableState
+     */
+    private TableState etatDeLaTable;
+
     public Table(String client, Date date, TableType type) {
         this.client = client;
         this.date = date;
         this.Type = type;
         produitsConsommes = new ArrayList<>();
+
+        // Initialisation de l'état courant de la table à "Réservée"
+        this.etatDeLaTable = new Reserver(this);
     }
 
     /**
@@ -60,7 +71,9 @@ public class Table {
         return simpleDateFormat.format(date);
     }
 
-
+    /**
+     * @return le montant total des produits consommés par table
+     */
     public double getMontant() {
         double montant = 0;
         for (Produit produit : produitsConsommes) {
@@ -75,4 +88,32 @@ public class Table {
     public List<Produit> getProduitsConsommes() {
         return produitsConsommes;
     }
+
+    // ======================================== Lab 2 tâche 2 : State pattern ========================================
+
+    /**
+     * Permet de changer l'état de la table à "AccueillirClient"
+     */
+    public void accueillirClient() {
+        this.etatDeLaTable = etatDeLaTable.accueillirClient();
+    }
+    /**
+     * Permet de changer l'état de la table à "PrendreCommande"
+     */
+    public void servirProduits() {
+        this.etatDeLaTable = etatDeLaTable.servirProduits();
+    }
+    /**
+     * Permet de changer l'état de la table à "Fermer"
+     */
+    public void fermer() {
+        this.etatDeLaTable = etatDeLaTable.fermer();
+    }
+    /**
+     * Permet de changer l'état de la table à "Reserver"
+     */
+    public void afficherEtat() {
+        this.etatDeLaTable.afficher();
+    }
+
 }

@@ -93,15 +93,12 @@ public class Restaurant {
     }
 
     // ======================================== Tâche 4: State pattern ========================================
-    public void AfficherEtatTable(Table table){
-      System.out.println("Etat de la table du Restaurant:");
-      for (Table table : tables) {
-          table.afficherEtat();
-          System.out.println("----------------------------------------");
+    public void AfficherEtatTable(){
+      System.out.println("Etat des tables du Restaurant:");
+      for (Table AfficherEtatTable : tables) {
+          AfficherEtatTable.afficherEtat();
       }
     }
-
-
 
 
     /**
@@ -116,29 +113,60 @@ public class Restaurant {
         Restaurant restaurant = new Restaurant();
 
 
-        // Tache 1: Composite pattern
-        //tache1(restaurant);
+        // Lab 1 - Tache 1: Composite pattern
+        // tache1(restaurant);
 
-        // Tache 2: Abstract Factory pattern
-        //tache2(restaurant);
+        // Lab 1 - Tache 2: Abstract Factory pattern
+        // tache2(restaurant);
 
-
-
-        // Tache 1 : Singleton pattern
-        tache3();
+        // Lab 2 - Tache 1 : Singleton pattern
+        // tache3();
 
 
-        // Tache 2 : State pattern
-        tache4();
-    }
-
-    private static void tache4() {
-        // Ici commence la tâche 2 : State pattern
-        // comment implémenter le pattern state ?
+        // Lab 2 - Tache 2 : State pattern
+        tache4(restaurant);
     }
 
     /*
-        Tâche 3 : Singleton pattern
+        Lab 2 - Tâche 2 : State pattern
+
+            1. Création de tables pour le restaurant
+            2. Ajout de produits aux tables
+            3. Affichage de l'état des tables
+    */
+    private static void tache4(Restaurant restaurant) {
+
+
+        System.out.println("----------------------------------------");
+        System.out.println("Tâche 4: State pattern :");
+        System.out.println("----------------------------------------");
+
+        Table table1 = new Table("Client A", new Date(), TableType.PLAISIR);
+        table1.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
+        table1.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
+
+        Table table2 = new Table("Client B", new Date(), TableType.DIET);
+        table2.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
+        table2.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
+
+        restaurant.ajouterTable(table1);
+        restaurant.ajouterTable(table2);
+
+        table1.afficherEtat();        // Affiche l'état "Réservée"
+        table1.accueillirClient();    // Passe à l'état "Servie"
+        table1.afficherEtat();        // Affiche l'état "Servie"
+        table1.servirProduits();      // Actionne le service des produits
+        table1.fermer();              // Passe à l'état "Clôturée"
+        table1.afficherEtat();        // Affiche l'état "Clôturée"
+        table1.accueillirClient();    // Impossible : la table est clôturée
+        table1.servirProduits();      // Impossible : la table est clôturée
+
+        restaurant.AfficherEtatTable();
+
+    }
+
+    /*
+        Lab 2 - Tâche 1 : Singleton pattern
 
             1. Création de tables pour le restaurant
             2. Ajout de produits aux tables
@@ -146,6 +174,12 @@ public class Restaurant {
             4. Affichage des statistiques
      */
     private static void tache3() {
+
+
+        System.out.println("----------------------------------------");
+        System.out.println("Tâche 3: Singleton pattern :");
+        System.out.println("----------------------------------------");
+
         Table table1 = new Table("Alice", new Date(), TableType.VEGAN);
         table1.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
         table1.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
@@ -161,7 +195,7 @@ public class Restaurant {
     }
 
     /*
-        Tâche 1: Composite pattern
+        Lab 1 - Tâche 1: Composite pattern
      */
     private static void tache1(Restaurant restaurant) {
 
@@ -187,15 +221,7 @@ public class Restaurant {
         menuMidi.ajouterProduit(dessert);
         menuMidi.ajouterProduit(soda);
         menuMidi.ajouterProduit(cafe);
-/*
-        // Ajout des produits au restaurant
-        restaurant.ajouterProduit(entree);
-        restaurant.ajouterProduit(principal);
-        restaurant.ajouterProduit(dessert);
-        // Ajout des boissons au restaurant
-        restaurant.ajouterProduit(soda);
-        restaurant.ajouterProduit(cafe);
-*/
+
         // Ajout du menu au restaurant
         restaurant.ajouterProduit(menuMidi);
 
@@ -205,7 +231,7 @@ public class Restaurant {
 
 
     /*
-        Tâche 2: Abstract Factory pattern
+       Lab 1 - Tâche 2: Factory et Abstract Factory pattern
      */
     private static void tache2(Restaurant restaurant) {
 
