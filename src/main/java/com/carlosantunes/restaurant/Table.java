@@ -31,7 +31,7 @@ public class Table {
         produitsConsommes = new ArrayList<>();
 
         // Initialisation de l'état courant de la table à "Réservée"
-        this.etatDeLaTable = new Reserver(this);
+        this.etatDeLaTable = Reserver.getInstance();
     }
 
     /**
@@ -95,25 +95,25 @@ public class Table {
      * Permet de changer l'état de la table à "AccueillirClient"
      */
     public void accueillirClient() {
-        this.etatDeLaTable = etatDeLaTable.accueillirClient();
+        this.etatDeLaTable = etatDeLaTable.accueillirClient(this);
     }
     /**
      * Permet de changer l'état de la table à "PrendreCommande"
      */
     public void servirProduits() {
-        this.etatDeLaTable = etatDeLaTable.servirProduits();
+        this.etatDeLaTable = etatDeLaTable.servirProduits(this);
     }
     /**
      * Permet de changer l'état de la table à "Fermer"
      */
     public void fermer() {
-        this.etatDeLaTable = etatDeLaTable.fermer();
+        this.etatDeLaTable = etatDeLaTable.fermer(this);
     }
     /**
      * Permet de changer l'état de la table à "Reserver"
      */
     public void afficherEtat() {
-        this.etatDeLaTable.afficher();
+        this.etatDeLaTable.afficher(this);
     }
 
     /**

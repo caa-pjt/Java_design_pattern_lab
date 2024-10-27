@@ -3,33 +3,36 @@ package com.carlosantunes.restaurant.etat;
 import com.carlosantunes.restaurant.Table;
 
 public class Reserver extends TableState {
+    private static final Reserver instance = new Reserver();
 
-    public Reserver(Table table) {
-        super(table);
+    private Reserver() {}
+
+    public static Reserver getInstance() {
+        return instance;
     }
 
     @Override
-    public TableState accueillirClient() {
+    public TableState accueillirClient(Table table) {
         System.out.println("Le client est accueilli à la table " + table.getTableType());
-        return new Servie(table);
+        return Servie.getInstance();
     }
 
     @Override
-    public TableState servirProduits() {
+    public TableState servirProduits(Table table) {
         System.out.println("Erreur : Impossible de servir des produits. La table est réservée et le client n'est pas encore accueilli.");
         System.out.println("----------------------------------------");
         return this;
     }
 
     @Override
-    public TableState fermer() {
+    public TableState fermer(Table table) {
         System.out.println("Erreur : Impossible de fermer la table. La table est réservée et le client n'est pas encore accueilli.");
         System.out.println("----------------------------------------");
         return this;
     }
 
     @Override
-    public void afficher() {
+    public void afficher(Table table) {
         System.out.println("État actuel: Réservée pour " + table.getClient() + " (" + table.getTableType() + ")");
         System.out.println("----------------------------------------");
     }
