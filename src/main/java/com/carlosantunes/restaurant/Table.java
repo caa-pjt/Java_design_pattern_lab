@@ -116,4 +116,12 @@ public class Table {
         this.etatDeLaTable.afficher();
     }
 
+    /**
+     * Utilisé pour les tests unitaires pour vérifier l'état de la table
+     * @return l'état courant de la table
+     * @see com.carlosantunes.restaurant.etat.TableState
+     */
+    public TableState getEtatDeLaTable() {
+        return etatDeLaTable;
+    }
 }

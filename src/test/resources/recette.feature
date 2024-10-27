@@ -1,3 +1,6 @@
+# Created by : carlos Antunes
+# Labo 2 tâche 1 - Singleton Pattern
+
 Feature: Gestion des tables clôturées et des recettes
 
   Scenario: Clôturer plusieurs tables et afficher les statistiques

@@ -8,8 +8,11 @@ import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.enums.MenuType;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.enums.TableType;
+import com.carlosantunes.restaurant.etat.Cloturer;
+import com.carlosantunes.restaurant.etat.Servie;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
 import com.carlosantunes.restaurant.produit.Menu;
+import com.carlosantunes.restaurant.produit.Produit;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.plat.Plat;
 import io.cucumber.java.en.*;
@@ -21,6 +24,7 @@ public class RestaurantStepDefinitions {
 
     private Restaurant restaurant;
     private Menu menu;
+    private Produit produit;
     private Table table;
     private Table table2;
 
@@ -183,4 +187,56 @@ public class RestaurantStepDefinitions {
 
     }
 
+
+
+    // =========== restaurantTableState.feature ===========
+
+    @Given("une table réservée pour {string} de type {string}")
+    public void une_table_reservee_pour(String client, String type) {
+        table = new Table(client, new Date(), TableType.valueOf(type.toUpperCase()));
+    }
+
+    @When("je accueille le client")
+    public void je_accueille_le_client() {
+        table.accueillirClient();
+    }
+
+    @Then("la table doit être servie")
+    public void la_table_doit_etre_servie() {
+        Assert.assertTrue(table.getEtatDeLaTable() instanceof Servie);
+    }
+
+    @When("je sers des produits")
+    public void je_sers_des_produits() {
+        table.accueillirClient();
+        table.servirProduits();
+    }
+
+    @When("je ferme la table")
+    public void je_ferme_la_table() {
+        table.fermer();
+    }
+
+    @Then("la table doit être clôturée")
+    public void la_table_doit_etre_cloturee() {
+        Assert.assertTrue(table.getEtatDeLaTable() instanceof Cloturer);
+    }
+
+    @When("j'ajoute un produit {string} au montant de {double} CHF")
+    public void jAjouteUnProduitAuMontantDeCHF(String nomProduit, double montant) {
+        Produit produitAAjouter = new Plat(nomProduit, montant, PlatType.RICHE);
+        table.ajouterProduit(produitAAjouter);
+    }
+
+    @Then("les produits consommés doivent inclure {string}")
+    public void les_produits_consommes_doivent_inclure(String nomProduit) {
+        boolean found = table.getProduitsConsommes().stream()
+                .anyMatch(produit -> produit.getNom().equals(nomProduit));
+        Assert.assertTrue(found);
+    }
+
+    @And("je peux servir des produits")
+    public void jePeuxServirDesProduits() {
+        Assert.assertTrue(table.getEtatDeLaTable() instanceof Servie);
+    }
 }

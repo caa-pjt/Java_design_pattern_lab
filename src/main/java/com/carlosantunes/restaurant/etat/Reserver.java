@@ -4,7 +4,6 @@ import com.carlosantunes.restaurant.Table;
 
 public class Reserver extends TableState {
 
-    // Rendre le constructeur public pour éviter les erreurs d'accès
     public Reserver(Table table) {
         super(table);
     }
@@ -12,7 +11,7 @@ public class Reserver extends TableState {
     @Override
     public TableState accueillirClient() {
         System.out.println("Le client est accueilli à la table " + table.getTableType());
-        return new Servie(table); // Passage à l'état suivant
+        return new Servie(table);
     }
 
     @Override
