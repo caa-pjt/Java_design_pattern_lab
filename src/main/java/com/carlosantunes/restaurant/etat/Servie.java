@@ -3,14 +3,22 @@ package com.carlosantunes.restaurant.etat;
 import com.carlosantunes.restaurant.Table;
 
 public class Servie extends TableState {
+    private static Servie instance;
 
-    public Servie(Table table) {
+    private Servie(Table table) {
         super(table);
+    }
+
+    public static Servie getInstance(Table table) {
+        if (instance == null) {
+            instance = new Servie(table);
+        }
+        return instance;
     }
 
     @Override
     public TableState accueillirClient() {
-        System.out.println("La table accueille les clients.");
+        System.out.println("La table à déjà accueilli les clients.");
         return this;
     }
 
@@ -25,12 +33,12 @@ public class Servie extends TableState {
 
     @Override
     public TableState fermer() {
-        System.out.println("La table est fermée.");
-        return new Cloturer(table);
+        System.out.println("La table est clôturée.");
+        return Cloturer.getInstance(table);
     }
 
     @Override
     public void afficher() {
-        System.out.println("La table est servie.");
+        System.out.println("La table a été servie et attend d'être clôturée.");
     }
 }

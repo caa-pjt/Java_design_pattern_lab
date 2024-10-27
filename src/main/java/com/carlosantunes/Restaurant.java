@@ -92,6 +92,16 @@ public class Restaurant {
         }
     }
 
+    // ======================================== Tâche 4: State pattern ========================================
+    public void AfficherEtatTable(Table table){
+      System.out.println("Etat de la table du Restaurant:");
+      for (Table table : tables) {
+          table.afficherEtat();
+          System.out.println("----------------------------------------");
+      }
+    }
+
+
 
 
     /**
@@ -116,6 +126,15 @@ public class Restaurant {
 
         // Tache 1 : Singleton pattern
         tache3();
+
+
+        // Tache 2 : State pattern
+        tache4();
+    }
+
+    private static void tache4() {
+        // Ici commence la tâche 2 : State pattern
+        // comment implémenter le pattern state ?
     }
 
     /*
