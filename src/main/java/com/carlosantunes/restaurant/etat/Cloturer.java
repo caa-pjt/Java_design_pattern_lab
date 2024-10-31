@@ -13,29 +13,51 @@ public class Cloturer extends TableState {
 
     @Override
     public TableState accueillirClient(Table table) {
-        System.out.println("Erreur : Impossible d'accueillir un client. La table est clôturée.");
-        System.out.println("----------------------------------------");
+        try {
+            afficheErreur("Erreur : Impossible d'accueillir un client. La table est clôturée.");
+        } catch (IllegalStateException e) {
+            System.out.println("Message : " + e.getMessage());
+        }
         return this;
     }
 
     @Override
     public TableState servirProduits(Table table) {
-        System.out.println("Erreur : Impossible de servir des produits. La table est clôturée.");
-        System.out.println("----------------------------------------");
+        try {
+            verifierProduitsConsommes(table, "Erreur : Impossible de servir des produits. La table est clôturée.");
+        } catch (IllegalStateException e) {
+            System.out.println("Message : " + e.getMessage());
+        }
         return this;
     }
 
     @Override
     public TableState fermer(Table table) {
-        System.out.println("Erreur : Impossible de fermer la table. La table est déjà clôturée.");
+        try {
+            afficheErreur("Erreur : Impossible de fermer la table. La table est déjà clôturée.");
+        } catch (IllegalStateException e) {
+            System.out.println("Message : " + e.getMessage());
+        }
         return this;
     }
 
     @Override
     public void afficher(Table table) {
-        System.out.println("La table du client : ("+ table.getClient() + ") est clôturée voir la facture ci-dessous :");
-        table.afficherProduitsConsommes();
-        System.out.println("Montant total : " + table.getMontant() + " CHF");
-        System.out.println("----------------------------------------");
+        try {
+            verifierProduitsConsommes(table, "Erreur : Le client (" + table.getClient() + ") n'a rien consommé, " +
+                    "impossible " +
+                    "d'afficher " +
+                    "les " +
+                    "informations de la table.");
+
+            System.out.println("----------------------------------------");
+            System.out.println("La table du client : (" + table.getClient() + ") est clôturée voir la facture ci-dessous :");
+            table.afficherProduitsConsommes();
+            System.out.println("Montant total : " + table.getMontant() + " CHF");
+            System.out.println("----------------------------------------");
+
+        } catch (IllegalStateException e) {
+            System.out.println("Message : " + e.getMessage());
+        }
     }
 }

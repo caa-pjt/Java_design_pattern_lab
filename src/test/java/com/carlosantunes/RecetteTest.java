@@ -42,6 +42,7 @@ public class RecetteTest {
 
     @Test
     public void testCloturerTable() {
+        Recette.getInstance().viderRecette();
         // Ajouter des produits et clôturer la table
         Plat plat = new Plat("Pâtes", 12.50, PlatType.RICHE);
         table.ajouterProduit(plat);

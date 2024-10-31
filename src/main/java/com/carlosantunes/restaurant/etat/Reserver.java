@@ -19,15 +19,21 @@ public class Reserver extends TableState {
 
     @Override
     public TableState servirProduits(Table table) {
-        System.out.println("Erreur : Impossible de servir des produits. La table est réservée et le client n'est pas encore accueilli.");
-        System.out.println("----------------------------------------");
+        try {
+            afficheErreur("Erreur : Impossible de servir des produits. La table est réservée et le client n'est pas encore accueilli.");
+        } catch (IllegalStateException e) {
+            System.out.println("Message : " + e.getMessage());
+        }
         return this;
     }
 
     @Override
     public TableState fermer(Table table) {
-        System.out.println("Erreur : Impossible de fermer la table. La table est réservée et le client n'est pas encore accueilli.");
-        System.out.println("----------------------------------------");
+        try {
+            afficheErreur("Erreur : Impossible de fermer la table. La table est réservée et le client n'est pas encore accueilli.");
+        } catch (IllegalStateException e) {
+            System.out.println("Message : " + e.getMessage());
+        }
         return this;
     }
 

@@ -92,15 +92,6 @@ public class Restaurant {
         }
     }
 
-    // ======================================== Tâche 4: State pattern ========================================
-    public void AfficherEtatTable(){
-      System.out.println("Etat des tables du Restaurant:");
-      for (Table AfficherEtatTable : tables) {
-          AfficherEtatTable.afficherEtat();
-      }
-    }
-
-
     /**
      * Méthode principale du programme.
      * Crée un restaurant et effectue les tâches demandées.
@@ -122,7 +113,6 @@ public class Restaurant {
         // Lab 2 - Tache 1 : Singleton pattern
         // tache3();
 
-
         // Lab 2 - Tache 2 : State pattern
         tache4(restaurant);
     }
@@ -141,16 +131,9 @@ public class Restaurant {
         System.out.println("Tâche 4: State pattern :");
         System.out.println("----------------------------------------");
 
-        Table table1 = new Table("Client A", new Date(), TableType.PLAISIR);
+        Table table1 = new Table("Bob", new Date(), TableType.PLAISIR);
         table1.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
         table1.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
-
-        Table table2 = new Table("Client B", new Date(), TableType.DIET);
-        table2.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
-        table2.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
-
-        restaurant.ajouterTable(table1);
-        restaurant.ajouterTable(table2);
 
         table1.afficherEtat();        // Affiche l'état "Réservée"
         table1.accueillirClient();    // Passe à l'état "Servie"
@@ -158,10 +141,22 @@ public class Restaurant {
         table1.servirProduits();      // Actionne le service des produits
         table1.fermer();              // Passe à l'état "Clôturée"
         table1.afficherEtat();        // Affiche l'état "Clôturée"
+
         table1.accueillirClient();    // Impossible : la table est clôturée
         table1.servirProduits();      // Impossible : la table est clôturée
 
-        restaurant.AfficherEtatTable();
+        Table table2 = new Table("Julien", new Date(), TableType.DIET);
+
+        table2.accueillirClient();  // Passe à l'état "Servie"
+        table2.servirProduits();    // Impossible : aucun produit n'a été consommé
+        table2.fermer();            // Passe à l'état "Clôturée"
+        table2.afficherEtat();      // Affiche l'état "Clôturée"
+
+
+        System.out.println("===== RECETTE DU RESTAURANT =====");
+        // Affichage la recette totale du restaurant
+        Recette.getInstance().afficherStatistiques();
+        System.out.println("=================================");
 
     }
 
@@ -186,8 +181,8 @@ public class Restaurant {
         Recette.getInstance().cloturerTable(table1);
 
         Table table2 = new Table("Bob", new Date(), TableType.PLAISIR);
-        table2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
-        table2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
+        // table2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
+        // table2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
         Recette.getInstance().cloturerTable(table2);
 
         Recette.getInstance().afficherStatistiques();
