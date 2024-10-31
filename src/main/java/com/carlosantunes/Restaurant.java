@@ -4,12 +4,10 @@ import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.TableFactory;
 import com.carlosantunes.restaurant.decorateur.ExtraDose;
 import com.carlosantunes.restaurant.decorateur.ExtraTaste;
-import com.carlosantunes.restaurant.enums.BoissonType;
-import com.carlosantunes.restaurant.enums.MenuType;
-import com.carlosantunes.restaurant.enums.PlatType;
-import com.carlosantunes.restaurant.enums.TableType;
+import com.carlosantunes.restaurant.enums.*;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
 import com.carlosantunes.restaurant.Table;
+import com.carlosantunes.restaurant.menuBuilder.*;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.Menu;
 import com.carlosantunes.restaurant.produit.plat.Plat;
@@ -119,7 +117,29 @@ public class Restaurant {
         // tache4(restaurant);
 
         // Lab 3 - Tache 1 : Decorator pattern
-        tache5(restaurant);
+        // tache5(restaurant);
+        
+        // Lab 3 - Tache 2 : Builder pattern
+        tache6(restaurant);
+    }
+
+    private static void tache6(Restaurant restaurant) {
+        System.out.println("----------------------------------------");
+        System.out.println("Tâche 6: Builder pattern :");
+        System.out.println("----------------------------------------");
+
+        // Construire un menu Normal Diet
+        Builder builderDiet = new ConcretMenuDiet("Menu Diet");
+        DirecteurNormal directeurNormal = new DirecteurNormal(builderDiet);
+        Menu menuDiet = directeurNormal.construireMenu();
+        menuDiet.afficher();
+
+        // Construire un menu Menu Copieux Plaisir
+        Builder builderPlaisir = new ConcretMenuPlaisir("Menu Plaisir et Copieux");
+        DirecteurCopieux directeurCopieux = new DirecteurCopieux(builderPlaisir);
+        Menu menuPlaisir = directeurCopieux.construireMenu();
+        menuPlaisir.afficher();
+
     }
 
     /*
