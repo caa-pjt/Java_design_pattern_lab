@@ -20,7 +20,7 @@ public class Plat implements Produit {
      * @param prix Le prix du plat.
      * @param type Le type du plat (entrée, plat principal, dessert).
      */
-    public Plat(String nom, Double prix, PlatType type) {
+    public Plat(String nom, double prix, PlatType type) {
         this.nom = nom;
         this.prix = prix;
         this.type = type;
@@ -32,7 +32,7 @@ public class Plat implements Produit {
     }
 
     @Override
-    public Double getPrix() {
+    public double getPrix() {
         return prix;
     }
 

@@ -2,6 +2,8 @@ package com.carlosantunes.restaurant.produit;
 
 import com.carlosantunes.restaurant.enums.MenuType;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,12 +49,12 @@ public class Menu implements Produit{
      * @return Le prix total du menu.
      */
     @Override
-    public Double getPrix() {
-        Double prix = 0.0;
+    public double getPrix() {
+        double prix = 0.0;
         for (Produit produit : produits) {
             prix += produit.getPrix();
         }
-        return prix;
+        return new BigDecimal(prix).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     @Override

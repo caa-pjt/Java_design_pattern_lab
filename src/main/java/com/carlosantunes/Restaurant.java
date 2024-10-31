@@ -2,6 +2,8 @@ package com.carlosantunes;
 
 import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.TableFactory;
+import com.carlosantunes.restaurant.decorateur.ExtraDose;
+import com.carlosantunes.restaurant.decorateur.ExtraTaste;
 import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.enums.MenuType;
 import com.carlosantunes.restaurant.enums.PlatType;
@@ -114,7 +116,42 @@ public class Restaurant {
         // tache3();
 
         // Lab 2 - Tache 2 : State pattern
-        tache4(restaurant);
+        // tache4(restaurant);
+
+        // Lab 3 - Tache 1 : Decorator pattern
+        tache5(restaurant);
+    }
+
+    /*
+        Lab 3 - Tâche 1 : Decorator pattern
+
+            1. Création de plats et boissons
+            2. Ajout de décorations aux plats et boissons
+            3. Création d'un menu
+            4. Affichage des produits
+    */
+    private static void tache5(Restaurant restaurant) {
+
+        System.out.println("----------------------------------------");
+        System.out.println("Tâche 5: Decorator pattern :");
+        System.out.println("----------------------------------------");
+
+        Produit plat = new Plat("Steak", 12.00, PlatType.RICHE);
+        plat = new ExtraDose(plat);
+        plat.afficher();
+
+        Produit boisson = new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE);
+        boisson = new ExtraTaste(boisson);
+        boisson.afficher();
+
+        Menu menu = new Menu("Menu du jour", MenuType.PLAISIR);
+        menu.ajouterProduit(plat);
+        menu.ajouterProduit(boisson);
+        menu.afficher();
+
+        // menu = new ExtraDose(menu);
+        // menu = new ExtraTaste(menu);
+        // menu.afficher();
     }
 
     /*

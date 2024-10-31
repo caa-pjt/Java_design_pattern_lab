@@ -17,7 +17,7 @@ public interface Produit {
     /**
      * @return Le prix du produit.
      */
-    Double getPrix();
+    double getPrix();
 
     /**
      * @return Le type du produit par exemple, entrée, plat principal, dessert, boisson).

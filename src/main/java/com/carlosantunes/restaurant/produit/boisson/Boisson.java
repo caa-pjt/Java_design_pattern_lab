@@ -21,7 +21,7 @@ public class Boisson implements Produit {
      * @param prix Le prix de la boisson.
      * @param type Le type de boisson (froide ou chaude).
      */
-    public Boisson(String nom, Double prix, BoissonType type) {
+    public Boisson(String nom, double prix, BoissonType type) {
         this.nom = nom;
         this.prix = prix;
         this.type = type;
@@ -33,7 +33,7 @@ public class Boisson implements Produit {
     }
 
     @Override
-    public Double getPrix() {
+    public double getPrix() {
         return prix;
     }
 
