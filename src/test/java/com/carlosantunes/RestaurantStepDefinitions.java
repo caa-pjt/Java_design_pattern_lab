@@ -4,6 +4,7 @@ package com.carlosantunes;
 import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.TableFactory;
+import com.carlosantunes.restaurant.decorateur.ExtraTaste;
 import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.enums.MenuType;
 import com.carlosantunes.restaurant.enums.PlatType;
@@ -238,5 +239,22 @@ public class RestaurantStepDefinitions {
     @And("je peux servir des produits")
     public void jePeuxServirDesProduits() {
         Assert.assertTrue(table.getEtatDeLaTable() instanceof Servie);
+    }
+
+    // =========== restaurantProduitDecorator.feature ===========
+
+    @Given("un produit de base avec un prix de {double} CHF")
+    public void unProduitDeBaseAvecUnPrixDeCHF(double prix) {
+        produit = new Plat("Pâtes", prix, PlatType.RICHE);
+    }
+
+    @When("appliquer ExtraTaste au produit")
+    public void jAppliqueLExtraTasteAuProduit() {
+        produit = new ExtraTaste(produit);
+    }
+
+    @Then("le prix total doit être {double} CHF")
+    public void lePrixTotalDoitEtreCHF(double prixAttendu) {
+        Assert.assertEquals(prixAttendu, produit.getPrix(), 0.01);
     }
 }
