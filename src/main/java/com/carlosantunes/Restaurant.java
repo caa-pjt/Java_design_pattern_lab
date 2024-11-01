@@ -117,13 +117,19 @@ public class Restaurant {
         // tache4(restaurant);
 
         // Lab 3 - Tache 1 : Decorator pattern
-        // tache5(restaurant);
+        tache5(restaurant);
         
         // Lab 3 - Tache 2 : Builder pattern
-        tache6(restaurant);
+        // tache6();
     }
 
-    private static void tache6(Restaurant restaurant) {
+    /*
+        Lab 3 - Tâche 2 : Builder pattern
+
+            1. Création de menus Diet, Plaisir et Vegan selon le Builder pattern Normal et Copieux
+            2. Affichage des menus
+    */
+    private static void tache6() {
         System.out.println("----------------------------------------");
         System.out.println("Tâche 6: Builder pattern :");
         System.out.println("----------------------------------------");
@@ -164,14 +170,27 @@ public class Restaurant {
         boisson = new ExtraTaste(boisson);
         boisson.afficher();
 
-        Menu menu = new Menu("Menu du jour", MenuType.PLAISIR);
-        menu.ajouterProduit(plat);
-        menu.ajouterProduit(boisson);
+        /**
+         * À faire :
+         *
+         * Création d'un menu avec un plat et une boisson
+         * Ajout de décorations au menu
+         * Affichage du menu
+         *
+         *      Modiffier la branche Decorator pour ajouter une nouvelle décoration
+         */
+
+
+        Produit menu = new Menu("Menu du jour", MenuType.PLAISIR);
+        ((Menu) menu).ajouterProduit(plat);
+        ((Menu) menu).ajouterProduit(boisson);
         menu.afficher();
 
-        // menu = new ExtraDose(menu);
-        // menu = new ExtraTaste(menu);
-        // menu.afficher();
+        menu = new ExtraDose(menu);
+        menu.afficher();
+        menu = new ExtraTaste(menu);
+        menu.afficher();
+
     }
 
     /*
@@ -192,8 +211,18 @@ public class Restaurant {
         table1.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
         table1.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
 
+        System.out.println("===== ÉTAT DES TABLES =====");
+        System.out.println(table1.getEtatDeLaTable());
+
+
         table1.afficherEtat();        // Affiche l'état "Réservée"
         table1.accueillirClient();    // Passe à l'état "Servie"
+
+
+        System.out.println("===== ÉTAT DES TABLES =====");
+        System.out.println(table1.getEtatDeLaTable());
+
+
         table1.afficherEtat();        // Affiche l'état "Servie"
         table1.servirProduits();      // Actionne le service des produits
         table1.fermer();              // Passe à l'état "Clôturée"
@@ -235,6 +264,23 @@ public class Restaurant {
         Table table1 = new Table("Alice", new Date(), TableType.VEGAN);
         table1.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
         table1.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
+
+
+        /*
+            À faire :
+            Clôturer la table et afficher les statistiques
+            C'est au restaurant de clôturer la table et d'ajouter les informations à la recette !!!
+
+            Exemple :
+
+            Restaurant restaurant = new Restaurant();
+            restaurant.ajouterTable(table1);
+            restaurant.cloturer(table1);
+
+         */
+        /*
+
+        */
         Recette.getInstance().cloturerTable(table1);
 
         Table table2 = new Table("Bob", new Date(), TableType.PLAISIR);
