@@ -16,10 +16,10 @@ public final class Recette {
     private static volatile Recette instance = null;
 
     // Liste pour stocker les tables clôturées
-    private final List<Table> tablesCloturees;
+    private final List<Table> historiqueTablesClosurees;
 
     private Recette() {
-        this.tablesCloturees = new ArrayList<>();
+        this.historiqueTablesClosurees = new ArrayList<>();
     }
 
     /**
@@ -41,11 +41,11 @@ public final class Recette {
     /**
      * Clôture une table et ajoute les informations à la liste des tables clôturées.
      *
-     * @param table La table à clôturer.
+     * @param table La table clôturée.
      */
-    public void cloturerTable(Table table) {
+    public void setTableRecette(Table table) {
         synchronized (this) {
-            tablesCloturees.add(table);
+            historiqueTablesClosurees.add(table);
             System.out.println("Table clôturée pour le client " + table.getClient() + " avec un montant de " + table.getMontant() + " CHF.");
         }
     }
@@ -53,10 +53,10 @@ public final class Recette {
     /**
      * @return Le montant total des recettes.
      */
-    public double getRecetteTotal() {
+    public double getMontantTotalRecettes() {
         double total = 0;
         synchronized (this) {
-            for (Table table : tablesCloturees) {
+            for (Table table : historiqueTablesClosurees) {
                 total += table.getMontant();
             }
         }
@@ -70,7 +70,7 @@ public final class Recette {
     public void afficherStatistiques() {
         System.out.println("Statistiques des tables clôturées :");
         synchronized (this) {
-            for (Table table : tablesCloturees) {
+            for (Table table : historiqueTablesClosurees) {
                 System.out.println(
                         "Client: " + table.getClient() +
                         ", Date: " + table.getDate() +
@@ -78,7 +78,7 @@ public final class Recette {
                         ", Montant: " + table.getMontant() + " CHF."
                 );
             }
-            System.out.println("Total des recettes : " + getRecetteTotal() + " CHF.");
+            System.out.println("Total des recettes : " + getMontantTotalRecettes() + " CHF.");
         }
 
     }
@@ -89,9 +89,9 @@ public final class Recette {
     /**
      * @return La liste des tables clôturées
      */
-    public List<Table> listeTablesCloturees() {
+    public List<Table> getListeTablesCloturees() {
         synchronized (this) {
-            return new ArrayList<>(tablesCloturees); // Retourne une copie pour éviter toute modification externe
+            return new ArrayList<>(historiqueTablesClosurees); // Retourne une copie pour éviter toute modification externe
         }
     }
 
@@ -100,7 +100,7 @@ public final class Recette {
      */
     public void viderRecette() {
         synchronized (this) {
-            tablesCloturees.clear();
+            historiqueTablesClosurees.clear();
         }
     }
 }
