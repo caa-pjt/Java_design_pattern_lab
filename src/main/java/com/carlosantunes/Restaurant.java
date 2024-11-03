@@ -192,22 +192,11 @@ public class Restaurant {
 
         Produit plat = new Plat("Steak", 12.00, PlatType.RICHE);
         plat = new ExtraDose(plat);
-        plat.afficher();
+        //plat.afficher();
 
         Produit boisson = new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE);
         boisson = new ExtraTaste(boisson);
-        boisson.afficher();
-
-        /**
-         * À faire :
-         *
-         * Création d'un menu avec un plat et une boisson
-         * Ajout de décorations au menu
-         * Affichage du menu
-         *
-         *      Modiffier la branche Decorator pour ajouter une nouvelle décoration
-         */
-
+        //boisson.afficher();
 
         Produit menu = new Menu("Menu du jour", MenuType.PLAISIR);
         ((Menu) menu).ajouterProduit(plat);
@@ -215,10 +204,13 @@ public class Restaurant {
         menu.afficher();
 
         menu = new ExtraDose(menu);
-        menu.afficher();
+        // menu.afficher();
         menu = new ExtraTaste(menu);
+        System.out.println("----------------------------------- MENU FINAL -----------------------------------");
         menu.afficher();
 
+        System.out.println("----------- Prix du Menu avec les décorateurs ExtraDose et ExtraTaste ------------");
+        System.out.println(menu.getNom() + " : " + menu.getPrix() + " CHF");
     }
 
     /*
