@@ -92,6 +92,34 @@ public class Restaurant {
         }
     }
 
+    // ======================================== Tâche 3: Singleton pattern ========================================
+
+    /**
+     * Récupère les informations de la table pour les ajouter à la recette.
+     * Si aucun produit n'a été consommé, une exception est lancée.
+     *
+     * @param table La table à clôturer
+     */
+    public void cloturerTable(Table table) {
+        try {
+            if (table.getProduitsConsommes().isEmpty()) {
+                throw new IllegalArgumentException("Impossible de clôturer la table de ("+ table.getClient() +") aucun produit consommé !");
+            }
+            Recette.getInstance().setTableRecette(table);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Affiche les statistiques des tables clôturées.
+     */
+    public void afficherRecette() {
+        Recette.getInstance().afficherStatistiques();
+    }
+
+
+
     /**
      * Méthode principale du programme.
      * Crée un restaurant et effectue les tâches demandées.
@@ -135,8 +163,18 @@ public class Restaurant {
         table1.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
         table1.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
 
+        System.out.println("===== ÉTAT DES TABLES =====");
+        System.out.println(table1.getEtatDeLaTable());
+
+
         table1.afficherEtat();        // Affiche l'état "Réservée"
         table1.accueillirClient();    // Passe à l'état "Servie"
+
+
+        System.out.println("===== ÉTAT DES TABLES =====");
+        System.out.println(table1.getEtatDeLaTable());
+
+
         table1.afficherEtat();        // Affiche l'état "Servie"
         table1.servirProduits();      // Actionne le service des produits
         table1.fermer();              // Passe à l'état "Clôturée"
@@ -168,7 +206,7 @@ public class Restaurant {
             3. Clôture des tables
             4. Affichage des statistiques
      */
-    private static void tache3() {
+    private static void tache3(Restaurant restaurant) {
 
 
         System.out.println("----------------------------------------");
@@ -178,14 +216,20 @@ public class Restaurant {
         Table table1 = new Table("Alice", new Date(), TableType.VEGAN);
         table1.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
         table1.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
-        Recette.getInstance().cloturerTable(table1);
+
+
+        restaurant.ajouterTable(table1);
+        restaurant.cloturerTable(table1);
+
 
         Table table2 = new Table("Bob", new Date(), TableType.PLAISIR);
-        // table2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
-        // table2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
-        Recette.getInstance().cloturerTable(table2);
+        table2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
+        table2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
+        restaurant.ajouterTable(table2);
+        restaurant.cloturerTable(table2);
 
-        Recette.getInstance().afficherStatistiques();
+
+        restaurant.afficherRecette();
 
     }
 
