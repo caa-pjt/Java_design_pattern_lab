@@ -45,7 +45,7 @@ public class Servie extends TableState {
             System.out.println("----------------------------------------");
 
             // Clôture de la table et ajout de la recette
-            Recette.getInstance().cloturerTable(table);
+            Recette.getInstance().setTableRecette(table);
 
             System.out.println("Le client ("+table.getClient() +") a fini de consommer et demande l'addition.");
 
