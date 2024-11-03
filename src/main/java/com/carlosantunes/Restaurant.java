@@ -166,20 +166,25 @@ public class Restaurant {
 
         Produit plat = new Plat("Steak", 12.00, PlatType.RICHE);
         plat = new ExtraDose(plat);
-        plat.afficher();
+        //plat.afficher();
 
         Produit boisson = new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE);
         boisson = new ExtraTaste(boisson);
-        boisson.afficher();
+        //boisson.afficher();
 
-        Menu menu = new Menu("Menu du jour", MenuType.PLAISIR);
-        menu.ajouterProduit(plat);
-        menu.ajouterProduit(boisson);
+        Produit menu = new Menu("Menu du jour", MenuType.PLAISIR);
+        ((Menu) menu).ajouterProduit(plat);
+        ((Menu) menu).ajouterProduit(boisson);
         menu.afficher();
 
-        // menu = new ExtraDose(menu);
-        // menu = new ExtraTaste(menu);
+        menu = new ExtraDose(menu);
         // menu.afficher();
+        menu = new ExtraTaste(menu);
+        System.out.println("----------------------------------- MENU FINAL -----------------------------------");
+        menu.afficher();
+
+        System.out.println("----------- Prix du Menu avec les décorateurs ExtraDose et ExtraTaste ------------");
+        System.out.println(menu.getNom() + " : " + menu.getPrix() + " CHF");
     }
 
     /*
