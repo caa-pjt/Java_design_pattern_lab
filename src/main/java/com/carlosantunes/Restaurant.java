@@ -92,6 +92,32 @@ public class Restaurant {
         }
     }
 
+    // ======================================== Tâche 3: Singleton pattern ========================================
+
+    /**
+     * Récupère les informations de la table pour les ajouter à la recette.
+     * Si aucun produit n'a été consommé, une exception est lancée.
+     *
+     * @param table La table à clôturer
+     */
+    public void cloturerTable(Table table) {
+        try {
+            if (table.getProduitsConsommes().isEmpty()) {
+                throw new IllegalArgumentException("Impossible de clôturer la table de ("+ table.getClient() +") aucun produit consommé !");
+            }
+            Recette.getInstance().setTableRecette(table);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Affiche les statistiques des tables clôturées.
+     */
+    public void afficherRecette() {
+        Recette.getInstance().afficherStatistiques();
+    }
+
 
 
     /**
@@ -106,43 +132,56 @@ public class Restaurant {
         Restaurant restaurant = new Restaurant();
 
 
-        // Tache 1: Composite pattern
+        // Lab 1 - Tache 1: Composite pattern
         //tache1(restaurant);
 
-        // Tache 2: Abstract Factory pattern
+        // Lab 1 - Tache 2: Abstract Factory pattern
         //tache2(restaurant);
 
 
 
-        // Tache 1 : Singleton pattern
-        tache3();
+        // Lab 2 - Tache 1 : Singleton pattern
+        tache3(restaurant);
     }
 
     /*
-        Tâche 3 : Singleton pattern
+        Lab 2 - Tâche 1 : Singleton pattern
 
             1. Création de tables pour le restaurant
             2. Ajout de produits aux tables
             3. Clôture des tables
             4. Affichage des statistiques
      */
-    private static void tache3() {
+    private static void tache3(Restaurant restaurant) {
+
+
+        System.out.println("----------------------------------------");
+        System.out.println("Tâche 3: Singleton pattern :");
+        System.out.println("----------------------------------------");
+
+
         Table table1 = new Table("Alice", new Date(), TableType.VEGAN);
         table1.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
         table1.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
-        Recette.getInstance().cloturerTable(table1);
+
+
+        restaurant.ajouterTable(table1);
+        restaurant.cloturerTable(table1);
+
 
         Table table2 = new Table("Bob", new Date(), TableType.PLAISIR);
         table2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
         table2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
-        Recette.getInstance().cloturerTable(table2);
+        restaurant.ajouterTable(table2);
+        restaurant.cloturerTable(table2);
 
-        Recette.getInstance().afficherStatistiques();
+
+       restaurant.afficherRecette();
 
     }
 
     /*
-        Tâche 1: Composite pattern
+        Lab 1 - Tâche 1: Composite pattern
      */
     private static void tache1(Restaurant restaurant) {
 
@@ -186,7 +225,7 @@ public class Restaurant {
 
 
     /*
-        Tâche 2: Abstract Factory pattern
+       Lab 1 - Tâche 2: Factory et Abstract Factory pattern
      */
     private static void tache2(Restaurant restaurant) {
 

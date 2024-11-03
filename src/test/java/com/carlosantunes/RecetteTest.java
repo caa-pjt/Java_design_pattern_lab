@@ -45,8 +45,8 @@ public class RecetteTest {
         // Ajouter des produits et clôturer la table
         Plat plat = new Plat("Pâtes", 12.50, PlatType.RICHE);
         table.ajouterProduit(plat);
-        Recette.getInstance().cloturerTable(table);
-        Table table = Recette.getInstance().listeTablesCloturees().stream().findFirst().orElseThrow();
+        Recette.getInstance().setTableRecette(table);
+        Table table = Recette.getInstance().getListeTablesCloturees().stream().findFirst().orElseThrow();
         assertEquals(12.50, table.getMontant(), 0.01);
     }
 
