@@ -139,14 +139,14 @@ public class RestaurantStepDefinitions {
 
     @When("la table est clôturée")
     public void laTableEstCloturee() {
-        Recette.getInstance().cloturerTable(table);
+        Recette.getInstance().setTableRecette(table);
     }
 
     @Then("la recette doit contenir une table pour le client {string} avec un montant total de {double} CHF.")
     public void laRecetteDoitContenirUneTablePourLeClientAvecUnMontantTotalDe(String name, double montant) {
 
         // Montant de la dernière table clôturée
-        Table tableCloturee = Recette.getInstance().listeTablesCloturees().stream().filter(t -> t.getClient().equals(name)).findFirst().orElseThrow();
+        Table tableCloturee = Recette.getInstance().getListeTablesCloturees().stream().filter(t -> t.getClient().equals(name)).findFirst().orElseThrow();
         Assert.assertEquals(montant, tableCloturee.getMontant(), 0.01);
     }
 
@@ -170,20 +170,20 @@ public class RestaurantStepDefinitions {
 
     @When("les tables sont clôturées")
     public void lesTablesSontCloturees() {
-        Recette.getInstance().cloturerTable(table);
-        Recette.getInstance().cloturerTable(table2);
+        Recette.getInstance().setTableRecette(table);
+        Recette.getInstance().setTableRecette(table2);
     }
 
     @Then("le restaurant doit avoir {int} tables clôturées")
     public void leRestaurantDoitAvoirTablesCloturees(int nbrTablesCloturees) {
-        Assert.assertEquals(nbrTablesCloturees, Recette.getInstance().listeTablesCloturees().size());
+        Assert.assertEquals(nbrTablesCloturees, Recette.getInstance().getListeTablesCloturees().size());
     }
 
 
     @Then("les recettes totales doivent être {double} CHF.")
     public void lesRecettesTotalesDoiventEtreCHF(double totalAttendu) {
         // Comparer les doubles avec une précision de 0.01
-        Assert.assertEquals(totalAttendu, Recette.getInstance().getRecetteTotal(), 0.01);
+        Assert.assertEquals(totalAttendu, Recette.getInstance().getMontantTotalRecettes(), 0.01);
 
     }
 
