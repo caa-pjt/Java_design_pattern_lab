@@ -7,37 +7,83 @@ import com.carlosantunes.restaurant.fabrique.CreateurProduit;
 import com.carlosantunes.restaurant.produit.Menu;
 import com.carlosantunes.restaurant.produit.Produit;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class ConcretMenuPlaisir implements Builder {
 
     private final Menu menu;
     private final CreateurProduit createurType;
+    private final Random random;
 
     public ConcretMenuPlaisir(String nom) {
         this.menu = new Menu(nom, MenuType.PLAISIR);
         this.createurType = TableFactory.createTable(TableType.PLAISIR);
+        this.random = new Random();
+
+    }
+
+    /**
+     * Obtenir un produit aléatoire parmi une liste de produits
+     * @param produits Liste de produits
+     * @return Produit aléatoire
+     */
+    private String obtenirProduitAleatoire(List<String> produits) {
+        if(produits.isEmpty()) {
+            throw new IllegalArgumentException("Aucun produit disponible pour le type spécifié");
+        }
+        return produits.get(random.nextInt(produits.size()));
+    }
+
+    /**
+     * Génère un prix aléatoire entre min et max, arrondi au multiple de 0.05 le plus proche et formaté à 2 décimales
+     * @param min Prix minimum
+     * @param max Prix maximum
+     * @return Prix aléatoire
+     */
+    private double obtenirPrixAleatoire(Double min, Double max) {
+        // Générer un prix aléatoire entre 3.0 et 10.0
+        double prixAleatoire = ThreadLocalRandom.current().nextDouble(min, max);
+
+        // Arrondir au multiple de 0.05 le plus proche et formater à 2 décimales
+        prixAleatoire = Math.round(prixAleatoire * 20) / 20.0;
+        prixAleatoire = BigDecimal.valueOf(prixAleatoire).setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+        return prixAleatoire;
     }
 
     @Override
     public void construireEntree() {
-        Produit entree = createurType.creerPlat("Charcuterie", 8.0);
+        String nomEntree = obtenirProduitAleatoire(ProduitsParType.obtenirEntreesParType(MenuType.PLAISIR));
+        double prix = obtenirPrixAleatoire(3.0, 10.0);
+        Produit entree = createurType.creerPlat(nomEntree, prix);
         menu.ajouterProduit(entree);
     }
 
     @Override
     public void construirePlat() {
-        Produit plat = createurType.creerPlat("Steak", 15.0);
+        String nomPlat = obtenirProduitAleatoire(ProduitsParType.obtenirPlatsParType(MenuType.PLAISIR));
+        double prix = obtenirPrixAleatoire(10.0, 20.0);
+        Produit plat = createurType.creerPlat(nomPlat, prix);
         menu.ajouterProduit(plat);
     }
 
     @Override
     public void construireDessert() {
-        Produit dessert = createurType.creerPlat("Gâteau", 5.0);
+        String nomDessert = obtenirProduitAleatoire(ProduitsParType.obtenirDessertsParType(MenuType.PLAISIR));
+        double prix = obtenirPrixAleatoire(3.0, 10.0);
+        Produit dessert = createurType.creerPlat(nomDessert, prix);
         menu.ajouterProduit(dessert);
     }
 
     @Override
     public void construireBoisson() {
-        Produit boisson = createurType.creerBoisson("Vin Rouge", 6.0);
+        String nomBoisson = obtenirProduitAleatoire(ProduitsParType.obtenirBoissonsParType(MenuType.PLAISIR));
+        double prix = obtenirPrixAleatoire(10.0, 50.0);
+        Produit boisson = createurType.creerBoisson(nomBoisson, prix);
         menu.ajouterProduit(boisson);
     }
 

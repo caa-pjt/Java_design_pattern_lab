@@ -148,7 +148,7 @@ public class Restaurant {
         // tache5(restaurant);
 
         // Lab 3 - Tache 2 : Builder pattern
-        tache6();
+        tache6(restaurant);
     }
 
     /*
@@ -157,22 +157,28 @@ public class Restaurant {
             1. Création de menus Diet, Plaisir et Vegan selon le Builder pattern Normal et Copieux
             2. Affichage des menus
     */
-    private static void tache6() {
+    private static void tache6(Restaurant restaurant) {
         System.out.println("----------------------------------------");
         System.out.println("Tâche 6: Builder pattern :");
         System.out.println("----------------------------------------");
 
-        // Construire un menu Normal Diet
+        // Menu Normal Diet
         Builder builderDiet = new ConcretMenuDiet("Menu Diet");
         DirecteurNormal directeurNormal = new DirecteurNormal(builderDiet);
         Menu menuDiet = directeurNormal.construireMenu();
         menuDiet.afficher();
 
-        // Construire un menu Menu Copieux Plaisir
+        // Menu Copieux Plaisir
         Builder builderPlaisir = new ConcretMenuPlaisir("Menu Plaisir et Copieux");
         DirecteurCopieux directeurCopieux = new DirecteurCopieux(builderPlaisir);
         Menu menuPlaisir = directeurCopieux.construireMenu();
         menuPlaisir.afficher();
+
+        // Menu Normal Vegan
+        Builder builderVegan = new ConcretMenuVegan("Menu Vegan");
+        DirecteurNormal directeurNormalVegan = new DirecteurNormal(builderVegan);
+        Menu menuVegan = directeurNormalVegan.construireMenu();
+        menuVegan.afficher();
 
     }
 
