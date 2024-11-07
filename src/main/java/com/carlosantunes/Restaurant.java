@@ -8,6 +8,8 @@ import com.carlosantunes.restaurant.enums.*;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
 import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.menuBuilder.*;
+import com.carlosantunes.restaurant.pont.TaxationPrive;
+import com.carlosantunes.restaurant.pont.TaxationEntreprise;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.Menu;
 import com.carlosantunes.restaurant.produit.plat.Plat;
@@ -148,7 +150,67 @@ public class Restaurant {
         // tache5(restaurant);
 
         // Lab 3 - Tache 2 : Builder pattern
-        tache6(restaurant);
+        // tache6(restaurant);
+
+        // Lab 4 - Tache 1 : Bridge pattern
+        tache7(restaurant);
+    }
+
+    /*
+        Lab 4 - Tâche 1 : Bridge pattern
+
+            1. Création de tables privées et d'entreprise
+            2. Ajout de produits aux tables
+            3. Calcul des taxes sur les tables
+    */
+    public  static void tache7(Restaurant restaurant){
+
+        // Implémenter la solution 2 et ne pas permettre la solution 1 sinon il serait possible de ne pas ajouter la
+        // taxation à la table
+
+        /* Quelle est la meilleure solution pour le bridge pattern ?
+
+            1) Utiliser un setter pour définir le type de taxation sur les tables
+                - Création de tables privées et d'entreprise
+                - Ajout de produits aux tables
+                - Set de la taxation sur les tables
+                Exemple: Solution 1
+
+            2) Ajouter un deuxième constructeur pour accepter un objet Taxation ou modifier le constructeur existant
+                - Création de tables privées et d'entreprise avec taxation privée ou entreprise dans le constructeur
+                - Ajout de produits aux tables
+                - Calcul des taxes sur les tables
+                Exemple: Solution 2
+
+         */
+
+        System.out.println("------------------ Solution 1: Utiliser un setter pour définir le type de taxation sur les tables ------------------");
+        // Table privée avec taxation privée
+        Table tablePrive = new Table("Client 1", new Date(), TableType.PLAISIR);
+        tablePrive.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
+        tablePrive.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
+        tablePrive.setTaxation(new TaxationPrive());
+
+        // Table entreprise avec taxation entreprise
+        Table tableEntreprise = new Table("Client 2", new Date(), TableType.PLAISIR);
+        tableEntreprise.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
+        tableEntreprise.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
+        tableEntreprise.setTaxation(new TaxationEntreprise());
+
+        // Calcul des taxes
+        double taxePrivee = tablePrive.calculerTaxe();
+        double taxeEntreprise = tableEntreprise.calculerTaxe();
+
+        // Affichage des résultats
+        System.out.println("Taxe sur la table privée: " + taxePrivee);
+        System.out.println("Taxe sur la table entreprise: " + taxeEntreprise);
+
+        System.out.println("---------- Solution 2: Utiliser constructeur bis incluant la taxe ------------------");
+        Table tablePrivee2 = new Table("Client 1", new Date(), TableType.PLAISIR, new TaxationPrive());
+        tablePrivee2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
+        tablePrivee2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
+        System.out.println("Taxe sur la table privée: " + tablePrivee2.calculerTaxe());
+
     }
 
     /*
@@ -227,7 +289,6 @@ public class Restaurant {
             3. Affichage de l'état des tables
     */
     private static void tache4(Restaurant restaurant) {
-
 
         System.out.println("----------------------------------------");
         System.out.println("Tâche 4: State pattern :");

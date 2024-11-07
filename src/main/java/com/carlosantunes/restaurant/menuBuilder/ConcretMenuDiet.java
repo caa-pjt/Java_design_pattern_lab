@@ -43,7 +43,7 @@ public class ConcretMenuDiet implements Builder {
      * @param max Prix maximum
      * @return Prix aléatoire
      */
-    private double obtenirPrixAleatoire(Double min, Double max) {
+    private double obtenirPrixAleatoire(double min, double max) {
         // Générer un prix aléatoire entre 3.0 et 10.0
         double prixAleatoire = ThreadLocalRandom.current().nextDouble(min, max);
 
