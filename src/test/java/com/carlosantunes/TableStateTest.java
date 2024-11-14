@@ -1,20 +1,22 @@
 package com.carlosantunes;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.enums.PlatType;
+import com.carlosantunes.restaurant.enums.TableType;
 import com.carlosantunes.restaurant.etat.Cloturer;
 import com.carlosantunes.restaurant.etat.Reserver;
 import com.carlosantunes.restaurant.etat.Servie;
-import org.junit.Assert;
+import com.carlosantunes.restaurant.pont.TaxationEntreprise;
+import com.carlosantunes.restaurant.pont.TaxationPrive;
+import com.carlosantunes.restaurant.produit.plat.Plat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.carlosantunes.restaurant.Table;
-import com.carlosantunes.restaurant.enums.TableType;
-import com.carlosantunes.restaurant.produit.plat.Plat;
 
 import java.util.Date;
 import java.util.HashMap;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
  * Tests for the Table state transitions
@@ -25,8 +27,8 @@ public class TableStateTest {
 
     @BeforeEach
     public void setUp() {
-        Table table1 = new Table("Client 1", new Date(), TableType.PLAISIR);
-        Table table2 = new Table("Client 2", new Date(), TableType.VEGAN);
+        Table table1 = new Table("Client 1", new Date(), TableType.PLAISIR, new TaxationPrive());
+        Table table2 = new Table("Client 2", new Date(), TableType.VEGAN, new TaxationEntreprise());
         tables.put("table1", table1);
         tables.put("table2", table2);
     }
@@ -77,8 +79,8 @@ public class TableStateTest {
     public void testDeuxTablesDoiventResterIndependantes() {
 
         // Création de la deuxième table avec un type différent pour tester l'indépendance
-        tables.put("table3", new Table("Client 3", new Date(), TableType.VEGAN));
-        tables.put("table4", new Table("Client 4", new Date(), TableType.PLAISIR));
+        tables.put("table3", new Table("Client 3", new Date(), TableType.VEGAN, new TaxationEntreprise()));
+        tables.put("table4", new Table("Client 4", new Date(), TableType.PLAISIR, new TaxationPrive()));
 
         Table table1 = tables.get("table3");
         table1.getEtatDeLaTable().accueillirClient(table1); // Passer à l'état Servie

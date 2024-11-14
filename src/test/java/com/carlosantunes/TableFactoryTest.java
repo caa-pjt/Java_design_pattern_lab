@@ -6,6 +6,7 @@ import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.enums.TableType;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
+import com.carlosantunes.restaurant.pont.TaxationPrive;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.plat.Plat;
 import org.junit.Before;
@@ -13,7 +14,8 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TableFactoryTest {
 
@@ -30,7 +32,7 @@ public class TableFactoryTest {
         CreateurProduit createurType = TableFactory.createTable(TableType.valueOf(vegan));
 
         // Création de la table
-        Table tableVegan = new Table("Client1", new Date(), TableType.valueOf(vegan));
+        Table tableVegan = new Table("Client1", new Date(), TableType.valueOf(vegan), new TaxationPrive());
 
 
         // Vérification du type de la table
@@ -57,7 +59,7 @@ public class TableFactoryTest {
 
         // Utilisation de la fabrique pour choisir le type de table
         CreateurProduit createurPlaisir = TableFactory.createTable(TableType.valueOf(plaisir));
-        Table tablePlaisir = new Table("Client2", new Date(), TableType.valueOf(plaisir));
+        Table tablePlaisir = new Table("Client2", new Date(), TableType.valueOf(plaisir), new TaxationPrive());
 
         // Vérification du type de la table
         assertEquals(TableType.PLAISIR, tablePlaisir.getTableType());
@@ -80,7 +82,6 @@ public class TableFactoryTest {
         // Vérification du nombre de produits
         assertEquals(2, tablePlaisir.getProduitsConsommes().size());
     }
-
 
 
 }

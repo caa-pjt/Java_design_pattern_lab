@@ -1,19 +1,22 @@
 package com.carlosantunes;
 
 import com.carlosantunes.restaurant.Recette;
+import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.TableFactory;
 import com.carlosantunes.restaurant.decorateur.ExtraDose;
 import com.carlosantunes.restaurant.decorateur.ExtraTaste;
-import com.carlosantunes.restaurant.enums.*;
+import com.carlosantunes.restaurant.enums.BoissonType;
+import com.carlosantunes.restaurant.enums.MenuType;
+import com.carlosantunes.restaurant.enums.PlatType;
+import com.carlosantunes.restaurant.enums.TableType;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
-import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.menuBuilder.*;
-import com.carlosantunes.restaurant.pont.TaxationPrive;
 import com.carlosantunes.restaurant.pont.TaxationEntreprise;
-import com.carlosantunes.restaurant.produit.boisson.Boisson;
+import com.carlosantunes.restaurant.pont.TaxationPrive;
 import com.carlosantunes.restaurant.produit.Menu;
-import com.carlosantunes.restaurant.produit.plat.Plat;
 import com.carlosantunes.restaurant.produit.Produit;
+import com.carlosantunes.restaurant.produit.boisson.Boisson;
+import com.carlosantunes.restaurant.produit.plat.Plat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +48,7 @@ public class Restaurant {
 
 
     // ======================================== Tâche 1: Composite pattern ========================================
+
     /**
      * Ajoute un produit à la liste des produits du restaurant.
      *
@@ -53,6 +57,7 @@ public class Restaurant {
     public void ajouterProduit(Produit produit) {
         produits.add(produit);
     }
+
     /**
      * Affiche l'ensemble des produits disponibles dans le restaurant (plats, boissons, menus).
      * Chaque produit appelle sa propre méthode d'affichage via le polymorphisme.
@@ -75,8 +80,10 @@ public class Restaurant {
 
 
     // ======================================== Tâche 2: Abstract Factory pattern ========================================
+
     /**
      * Ajoute une table à la liste des tables du restaurant.
+     *
      * @param table La table à ajouter
      */
     public void ajouterTable(Table table) {
@@ -105,7 +112,7 @@ public class Restaurant {
     public void cloturerTable(Table table) {
         try {
             if (table.getProduitsConsommes().isEmpty()) {
-                throw new IllegalArgumentException("Impossible de clôturer la table de ("+ table.getClient() +") aucun produit consommé !");
+                throw new IllegalArgumentException("Impossible de clôturer la table de (" + table.getClient() + ") aucun produit consommé !");
             }
             Recette.getInstance().setTableRecette(table);
         } catch (Exception e) {
@@ -119,7 +126,6 @@ public class Restaurant {
     public void afficherRecette() {
         Recette.getInstance().afficherStatistiques();
     }
-
 
 
     /**
@@ -163,53 +169,34 @@ public class Restaurant {
             2. Ajout de produits aux tables
             3. Calcul des taxes sur les tables
     */
-    public  static void tache7(Restaurant restaurant){
+    public static void tache7(Restaurant restaurant) {
 
-        // Implémenter la solution 2 et ne pas permettre la solution 1 sinon il serait possible de ne pas ajouter la
-        // taxation à la table
+        System.out.println("----------------------------------------");
+        System.out.println("Tâche 7: Bridge pattern :");
+        System.out.println("----------------------------------------");
 
-        /* Quelle est la meilleure solution pour le bridge pattern ?
 
-            1) Utiliser un setter pour définir le type de taxation sur les tables
-                - Création de tables privées et d'entreprise
-                - Ajout de produits aux tables
-                - Set de la taxation sur les tables
-                Exemple: Solution 1
-
-            2) Ajouter un deuxième constructeur pour accepter un objet Taxation ou modifier le constructeur existant
-                - Création de tables privées et d'entreprise avec taxation privée ou entreprise dans le constructeur
-                - Ajout de produits aux tables
-                - Calcul des taxes sur les tables
-                Exemple: Solution 2
-
-         */
-
-        System.out.println("------------------ Solution 1: Utiliser un setter pour définir le type de taxation sur les tables ------------------");
         // Table privée avec taxation privée
-        Table tablePrive = new Table("Client 1", new Date(), TableType.PLAISIR);
+        Table tablePrive = new Table("Client 1", new Date(), TableType.PLAISIR, new TaxationPrive());
         tablePrive.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
         tablePrive.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
-        tablePrive.setTaxation(new TaxationPrive());
 
         // Table entreprise avec taxation entreprise
-        Table tableEntreprise = new Table("Client 2", new Date(), TableType.PLAISIR);
+        Table tableEntreprise = new Table("Client 2", new Date(), TableType.PLAISIR, new TaxationEntreprise());
         tableEntreprise.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
         tableEntreprise.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
-        tableEntreprise.setTaxation(new TaxationEntreprise());
+
+        // Affichage des tables montants HT
+        System.out.println("Table privée HT : " + tablePrive.getMontant());
+        System.out.println("Table entreprise HT : " + tableEntreprise.getMontant());
 
         // Calcul des taxes
         double taxePrivee = tablePrive.calculerTaxe();
         double taxeEntreprise = tableEntreprise.calculerTaxe();
 
-        // Affichage des résultats
+        // Affichage des tables montant TTC
         System.out.println("Taxe sur la table privée: " + taxePrivee);
         System.out.println("Taxe sur la table entreprise: " + taxeEntreprise);
-
-        System.out.println("---------- Solution 2: Utiliser constructeur bis incluant la taxe ------------------");
-        Table tablePrivee2 = new Table("Client 1", new Date(), TableType.PLAISIR, new TaxationPrive());
-        tablePrivee2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
-        tablePrivee2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
-        System.out.println("Taxe sur la table privée: " + tablePrivee2.calculerTaxe());
 
     }
 
@@ -314,7 +301,7 @@ public class Restaurant {
         CreateurProduit createurType = TableFactory.createTable(typeTable);
 
         // Création de la table avec l'état "Réservée"
-        Table table = new Table(client, new Date(), typeTable);
+        Table table = new Table(client, new Date(), typeTable, new TaxationPrive());
 
         // Création de 2 produits à partir du type de table
         Plat plat = createurType.creerPlat("Palat de test", 10.80);
@@ -363,7 +350,7 @@ public class Restaurant {
         System.out.println("----------------------------------------");
 
 
-        Table table1 = new Table("Alice", new Date(), TableType.VEGAN);
+        Table table1 = new Table("Alice", new Date(), TableType.VEGAN, new TaxationPrive());
         table1.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
         table1.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
 
@@ -372,14 +359,14 @@ public class Restaurant {
         restaurant.cloturerTable(table1);
 
 
-        Table table2 = new Table("Bob", new Date(), TableType.PLAISIR);
+        Table table2 = new Table("Bob", new Date(), TableType.PLAISIR, new TaxationEntreprise());
         table2.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
         table2.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
         restaurant.ajouterTable(table2);
         restaurant.cloturerTable(table2);
 
 
-       restaurant.afficherRecette();
+        restaurant.afficherRecette();
 
     }
 
@@ -447,7 +434,7 @@ public class Restaurant {
         CreateurProduit createurType = TableFactory.createTable(typeTable);
 
         // Création de la table
-        Table table = new Table(client, new Date(), typeTable);
+        Table table = new Table(client, new Date(), typeTable, new TaxationPrive());
 
         // Demande des détails du plat
         String[] detailsPlat = commanderProduit("plat");
@@ -473,7 +460,6 @@ public class Restaurant {
     }
 
 
-
     /**
      * Demande à l'utilisateur le nom et le prix d'un produit.
      *
@@ -493,7 +479,7 @@ public class Restaurant {
         // Demande du prix du produit
         System.out.println("Entrez le prix du " + typeProduit + " commandé:");
         String prixString = "";
-        while (prixString.isEmpty()) {
+        while (prixString.isEmpty() || !prixString.matches("^[0-9]+$")) {
             prixString = scanner.nextLine();
         }
 

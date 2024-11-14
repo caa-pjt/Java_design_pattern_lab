@@ -5,6 +5,7 @@ import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.enums.MenuType;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.enums.TableType;
+import com.carlosantunes.restaurant.pont.TaxationPrive;
 import com.carlosantunes.restaurant.produit.Menu;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.plat.Plat;
@@ -13,7 +14,8 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RestaurantTest {
 
@@ -114,7 +116,7 @@ public class RestaurantTest {
         Boisson boisson2 = new Boisson("Café", 1.50, BoissonType.LIGHT);
 
         // Création d'une table
-        Table table = new Table("Jean", new Date(), TableType.VEGAN);
+        Table table = new Table("Jean", new Date(), TableType.VEGAN, new TaxationPrive());
         table.ajouterProduit(plat);
         table.ajouterProduit(plat2);
         table.ajouterProduit(plat3);

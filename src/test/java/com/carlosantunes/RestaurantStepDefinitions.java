@@ -12,15 +12,20 @@ import com.carlosantunes.restaurant.enums.TableType;
 import com.carlosantunes.restaurant.etat.Cloturer;
 import com.carlosantunes.restaurant.etat.Servie;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
+import com.carlosantunes.restaurant.pont.TaxationPrive;
 import com.carlosantunes.restaurant.produit.Menu;
 import com.carlosantunes.restaurant.produit.Produit;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.plat.Plat;
-import io.cucumber.java.en.*;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 import java.util.Date;
 import java.util.HashMap;
+
 public class RestaurantStepDefinitions {
 
     private Restaurant restaurant;
@@ -124,7 +129,7 @@ public class RestaurantStepDefinitions {
         restaurant = new Restaurant();
 
         // Première table pour client1
-        Table table1 = new Table(client, new Date(), TableType.PLAISIR);
+        Table table1 = new Table(client, new Date(), TableType.PLAISIR, new TaxationPrive());
         tables.put(client, table1); // Ajout de la table au HashMap avec le nom du client1 comme clé
         table1.ajouterProduit(new Plat("Pâtes", 12.50, PlatType.RICHE));
         table1.ajouterProduit(new Boisson("Vin", 8.00, BoissonType.ALCOOLISEE));
@@ -151,13 +156,13 @@ public class RestaurantStepDefinitions {
         Recette.getInstance().viderRecette(); // Vide la recette avant de commencer
 
         // Première table pour client1
-        Table table1 = new Table(client1, new Date(), TableType.PLAISIR);
+        Table table1 = new Table(client1, new Date(), TableType.PLAISIR, new TaxationPrive());
         tables.put(client1, table1); // Ajout de la table au HashMap avec le nom du client1 comme clé
         table1.ajouterProduit(new Plat("Pâtes", 12.50, PlatType.RICHE));
         table1.ajouterProduit(new Boisson("Vin", 8.00, BoissonType.ALCOOLISEE));
 
         // Deuxième table pour client2
-        Table table2 = new Table(client2, new Date(), TableType.PLAISIR);
+        Table table2 = new Table(client2, new Date(), TableType.PLAISIR, new TaxationPrive());
         tables.put(client2, table2); // Ajout de la table au HashMap avec le nom du client2 comme clé
         table2.ajouterProduit(new Plat("Salade", 7.00, PlatType.VEGAN));
         table2.ajouterProduit(new Boisson("Eau", 3.50, BoissonType.GAZEUSE));
@@ -187,7 +192,7 @@ public class RestaurantStepDefinitions {
     // =========== restaurantTableState.feature ===========
     @Given("La table est réservée pour {string} de type {string}")
     public void laTableReserveePourDeType(String client, String type) {
-        Table nouvelleTable = new Table(client, new Date(), TableType.valueOf(type));
+        Table nouvelleTable = new Table(client, new Date(), TableType.valueOf(type), new TaxationPrive());
         tables.put(client, nouvelleTable); // Ajout de la table au HashMap avec le nom du client comme clé
         System.out.println("Table réservée pour " + client + " de type " + type);
     }
@@ -240,7 +245,7 @@ public class RestaurantStepDefinitions {
     @When("La table de type {string} est réservée pour {string}")
     public void laTableDeTypePLAISIREstReserveePour(String typeTable, String client) {
         createurProduit = TableFactory.createTable(TableType.valueOf(typeTable));
-        Table table = new Table(client, new Date(), TableType.valueOf(typeTable));
+        Table table = new Table(client, new Date(), TableType.valueOf(typeTable), new TaxationPrive());
         tables.put(client, table);
     }
 
