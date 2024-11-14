@@ -159,7 +159,65 @@ public class Restaurant {
         // tache6(restaurant);
 
         // Lab 4 - Tache 1 : Bridge pattern
-        tache7(restaurant);
+        //tache7(restaurant);
+
+        // Lab 4 - Tache 2 : Observer pattern
+        tache8(restaurant);
+    }
+
+    /*
+        Lab 4 - Tâche 2 : Observer pattern
+
+            1. Création de tables privées et d'entreprise
+            2. Ajout de produits aux tables
+            3. Changement d'état des tables :
+                1. Réservée
+                2. Servie
+                3. Clôturée
+            3. Si la table est clôturée, affichage de la facture
+            4. Affichage de la recette totale du restaurant
+    */
+    private static void tache8(Restaurant restaurant) {
+
+        System.out.println("----------------------------------------");
+        System.out.println("Tâche 8: Observer pattern :");
+        System.out.println("----------------------------------------");
+
+        // Utilisation de la fabrique pour choisir le type de table
+        CreateurProduit createurType = TableFactory.createTable(TableType.PLAISIR);
+
+        // Création de 2 produits à partir du type de table
+        Plat plat = createurType.creerPlat("Steak tartar", 20.80);
+        Boisson boisson = createurType.creerBoisson("Vin rouge", 32.25);
+
+        // Création de la table avec l'état "Réservée"
+        Table table = new Table("Carlos", new Date(), TableType.PLAISIR, new TaxationPrive());
+        restaurant.ajouterTable(table); // Ajout de la table au restaurant
+
+
+        table.getEtatDeLaTable().accueillirClient(table); // Passe à l'état "Servie"
+
+        // Ajout des produits à la table
+        table.ajouterProduit(plat);
+        table.ajouterProduit(boisson);
+
+        table.getEtatDeLaTable().servirProduits(table); // Affichage des produits servis
+        table.getEtatDeLaTable().fermer(table); // Passe à l'état "Cloturer"
+
+        Table table2 = new Table("Alice", new Date(), TableType.VEGAN, new TaxationPrive());
+        restaurant.ajouterTable(table2); // Ajout de la table au restaurant
+        table2.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
+        table2.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
+
+        table2.getEtatDeLaTable().accueillirClient(table2); // Passe à l'état "Servie"
+        table2.getEtatDeLaTable().servirProduits(table2); // Affichage des produits servis
+        table2.getEtatDeLaTable().fermer(table2); // Passe à l'état "Cloturer"
+
+        System.out.println("===== RECETTE DU RESTAURANT =====");
+        // Affichage la recette totale du restaurant
+        restaurant.afficherRecette();
+        System.out.println("=================================");
+
     }
 
     /*

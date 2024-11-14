@@ -1,12 +1,9 @@
 package com.carlosantunes.restaurant.etat;
 
-import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.Table;
 
 public class Servie extends TableState {
     private static final Servie instance = new Servie();
-
-    private Servie() {}
 
     public static Servie getInstance() {
         return instance;
@@ -30,7 +27,7 @@ public class Servie extends TableState {
             table.afficherProduitsConsommes();
             System.out.println("----------------------------------------");
         } catch (IllegalStateException e) {
-            System.out.println("Message : " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -39,22 +36,23 @@ public class Servie extends TableState {
         try {
             verifierProduitsConsommes(table, "Erreur : Impossible de fermer la table. Aucun produit n'a été consommé.");
 
-            System.out.println("Le client ("+table.getClient() +") a fini de consommer et demande et paye l'addition.");
+            System.out.println("Le client (" + table.getClient() + ") a fini de consommer et demande et paye l'addition.");
             System.out.println("----------------------------------------");
 
-            // Clôture de la table et ajout de la recette
-            Recette.getInstance().setTableRecette(table);
+            // Clôture de la table et notification de la recette pour enregistrer les informations
+            table.notifier();
 
+            // Changement de l'état de la table à "Clôturée"
             table.setEtatDeLaTable(Cloturer.getInstance());
 
         } catch (IllegalStateException e) {
-            System.out.println("Message : " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
     @Override
     public void afficher(Table table) {
-        System.out.println("Le client ("+ table.getClient() +") est en train de consommer à la table (" + table.getTableType() + ")");
+        System.out.println("Le client (" + table.getClient() + ") est en train de consommer à la table (" + table.getTableType() + ")");
         System.out.println("----------------------------------------");
 
     }

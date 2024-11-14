@@ -1,17 +1,21 @@
 package com.carlosantunes.restaurant.etat;
 
+import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.Table;
 
 public class Reserver extends TableState {
     private static final Reserver instance = new Reserver();
 
-     public static Reserver getInstance() {
+    public static Reserver getInstance() {
         return instance;
     }
 
     @Override
     public void accueillirClient(Table table) {
         System.out.println("Le client est accueilli à la table " + table.getTableType());
+        // La table est observée.
+        table.ajouterObserveur(Recette.getInstance());
+        // Changement de l'état de la table à "Servie"
         table.setEtatDeLaTable(Servie.getInstance());
     }
 

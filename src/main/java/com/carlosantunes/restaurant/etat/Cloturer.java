@@ -5,7 +5,8 @@ import com.carlosantunes.restaurant.Table;
 public class Cloturer extends TableState {
     private static final Cloturer instance = new Cloturer();
 
-    private Cloturer() {}
+    private Cloturer() {
+    }
 
     public static Cloturer getInstance() {
         return instance;
@@ -16,7 +17,7 @@ public class Cloturer extends TableState {
         try {
             afficheErreur("Erreur : Impossible d'accueillir un client. La table est clôturée.");
         } catch (IllegalStateException e) {
-            System.out.println("Message : " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -25,7 +26,7 @@ public class Cloturer extends TableState {
         try {
             verifierProduitsConsommes(table, "Erreur : Impossible de servir des produits. La table est clôturée.");
         } catch (IllegalStateException e) {
-            System.out.println("Message : " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -34,7 +35,7 @@ public class Cloturer extends TableState {
         try {
             afficheErreur("Erreur : Impossible de fermer la table. La table est déjà clôturée.");
         } catch (IllegalStateException e) {
-            System.out.println("Message : " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 

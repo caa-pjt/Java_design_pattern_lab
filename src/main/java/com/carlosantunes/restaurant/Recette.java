@@ -1,5 +1,7 @@
 package com.carlosantunes.restaurant;
 
+import com.carlosantunes.restaurant.observeur.Subscriber;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,30 +12,28 @@ import java.util.List;
  * Le type de table,
  * Le montant de l'addition.
  */
-public final class Recette {
+public final class Recette implements Subscriber {
 
-    // volatile = valeur qui peut être modifiée de manière asynchrone par plusieurs threads
-    private static volatile Recette instance = null;
+    private static final String DEVISE = "CHF";
+
+    private static Recette instance = null;
 
     // Liste pour stocker les tables clôturées
-    private final List<Table> historiqueTablesClosurees;
+    private final List<Table> historiqueTablesCloturees;
 
     private Recette() {
-        this.historiqueTablesClosurees = new ArrayList<>();
+        this.historiqueTablesCloturees = new ArrayList<>();
     }
+
 
     /**
      * Méthode pour obtenir l'instance de la recette.
      *
      * @return L'instance de la recette.
      */
-    public static Recette getInstance() {
+    public static synchronized Recette getInstance() {
         if (instance == null) {
-            synchronized (Recette.class) {
-                if (instance == null) {
-                    instance = new Recette();
-                }
-            }
+            instance = new Recette();
         }
         return instance;
     }
@@ -45,8 +45,8 @@ public final class Recette {
      */
     public void setTableRecette(Table table) {
         synchronized (this) {
-            historiqueTablesClosurees.add(table);
-            System.out.println("Table clôturée pour le client " + table.getClient() + " avec un montant de " + table.getMontant() + " CHF.");
+            historiqueTablesCloturees.add(table);
+            System.out.println("Table clôturée pour le client " + table.getClient() + " avec un montant de " + table.getMontant() + DEVISE);
         }
     }
 
@@ -56,7 +56,7 @@ public final class Recette {
     public double getMontantTotalRecettes() {
         double total = 0;
         synchronized (this) {
-            for (Table table : historiqueTablesClosurees) {
+            for (Table table : historiqueTablesCloturees) {
                 total += table.getMontant();
             }
         }
@@ -70,17 +70,29 @@ public final class Recette {
     public void afficherStatistiques() {
         System.out.println("Statistiques des tables clôturées :");
         synchronized (this) {
-            for (Table table : historiqueTablesClosurees) {
+            for (Table table : historiqueTablesCloturees) {
                 System.out.println(
                         "Client: " + table.getClient() +
-                        ", Date: " + table.getDate() +
-                        ", Type: " + table.getTableType() +
-                        ", Montant: " + table.getMontant() + " CHF."
+                                ", Date: " + table.getDate() +
+                                ", Type: " + table.getTableType() +
+                                ", Montant: " + table.getMontant() + DEVISE
                 );
             }
-            System.out.println("Total des recettes : " + getMontantTotalRecettes() + " CHF.");
+            System.out.println("Total des recettes : " + getMontantTotalRecettes() + DEVISE);
         }
 
+    }
+
+    /**
+     * Méthode de l'interface Observer pour notifier la recette d'une table clôturée.
+     *
+     * @param table La table clôturée.
+     */
+    @Override
+    public void update(Table table) {
+        if (table != null) {
+            setTableRecette(table);
+        }
     }
 
 
@@ -91,7 +103,7 @@ public final class Recette {
      */
     public List<Table> getListeTablesCloturees() {
         synchronized (this) {
-            return new ArrayList<>(historiqueTablesClosurees); // Retourne une copie pour éviter toute modification externe
+            return new ArrayList<>(historiqueTablesCloturees); // Retourne une copie pour éviter toute modification externe
         }
     }
 
@@ -100,7 +112,7 @@ public final class Recette {
      */
     public void viderRecette() {
         synchronized (this) {
-            historiqueTablesClosurees.clear();
+            historiqueTablesCloturees.clear();
         }
     }
 }
