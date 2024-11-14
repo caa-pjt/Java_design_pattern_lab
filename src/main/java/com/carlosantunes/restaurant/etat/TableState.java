@@ -4,9 +4,9 @@ import com.carlosantunes.restaurant.Table;
 
 public abstract class TableState {
 
-    public abstract TableState accueillirClient(Table table);
-    public abstract TableState servirProduits(Table table);
-    public abstract TableState fermer(Table table);
+    public abstract void accueillirClient(Table table);
+    public abstract void servirProduits(Table table);
+    public abstract void fermer(Table table);
     public abstract void afficher(Table table);
 
 

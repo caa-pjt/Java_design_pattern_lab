@@ -2,7 +2,7 @@ package com.carlosantunes.restaurant.menuBuilder;
 
 import com.carlosantunes.restaurant.produit.Menu;
 
-public class DirecteurNormal {
+public class DirecteurNormal implements Directeur {
 
     private final Builder builder;
 

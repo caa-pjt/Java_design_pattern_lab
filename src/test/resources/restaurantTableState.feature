@@ -4,16 +4,18 @@
 Feature: Gestion des tables dans le restaurant
 
   Scenario: Accueillir un client et servir des produits
-    Given une table réservée pour "Client A" de type "PLAISIR"
-    When je accueille le client
-    Then la table doit être servie
-    And je peux servir des produits
-    And j'ajoute un produit "Salade" au montant de 8.00 CHF
-    And les produits consommés doivent inclure "Salade"
+    Given La table est réservée pour "Client A" de type "PLAISIR"
+    When je accueille le client "Client A"
+    Then la table doit être servi pour "Client A"
+    And je peux servir des produits pour "Client A"
+    And j'ajoute un produit "Salade" au montant de 8.00 CHF à la table du client "Client A"
+    And les produits consommés à la table su client "Client A" doivent inclure "Salade"
 
   Scenario: Fermer la table après le service
-    Given une table réservée pour "Client C" de type "VEGAN"
-    When je accueille le client
-    And je sers des produits
-    And je ferme la table
-    Then la table doit être clôturée
+    Given La table est réservée pour "Client C" de type "VEGAN"
+    When je accueille le client "Client C"
+    Then la table doit être servi pour "Client C"
+    And je peux servir des produits pour "Client C"
+    And j'ajoute un produit "Salade" au montant de 8.00 CHF à la table du client "Client C"
+    And je ferme la table pour "Client C"
+    Then la table doit être clôturée pour "Client C"

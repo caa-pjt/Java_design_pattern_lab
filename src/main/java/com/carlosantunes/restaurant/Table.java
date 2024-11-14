@@ -123,39 +123,24 @@ public class Table {
 
     // ======================================== Lab 2 tâche 2 : State pattern ========================================
 
-    /**
-     * Permet de changer l'état de la table à "AccueillirClient"
-     */
-    public void accueillirClient() {
-        this.etatDeLaTable = etatDeLaTable.accueillirClient(this);
-    }
-    /**
-     * Permet de changer l'état de la table à "PrendreCommande"
-     */
-    public void servirProduits() {
-        this.etatDeLaTable = etatDeLaTable.servirProduits(this);
-    }
-    /**
-     * Permet de changer l'état de la table à "Fermer"
-     */
-    public void fermer() {
-        this.etatDeLaTable = etatDeLaTable.fermer(this);
-    }
-    /**
-     * Permet de changer l'état de la table à "Reserver"
-     */
-    public void afficherEtat() {
-        this.etatDeLaTable.afficher(this);
-    }
+
 
     /**
-     * Utilisé pour les tests unitaires pour vérifier l'état de la table
+     * Vérifie l'état de la table
      * @return l'état courant de la table
-     * @see com.carlosantunes.restaurant.etat.TableState
      */
     public TableState getEtatDeLaTable() {
         return etatDeLaTable;
     }
+
+    /**
+     * Change l'état de la table
+     * @param etatDeLaTable l'état à définir
+     */
+    public void setEtatDeLaTable(TableState etatDeLaTable) {
+        this.etatDeLaTable = etatDeLaTable;
+    }
+
 
     // ======================================== Lab 4 tâche 1 : Bridge pattern ========================================
 
