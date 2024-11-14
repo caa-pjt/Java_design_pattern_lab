@@ -4,6 +4,7 @@ import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.enums.TableType;
+import com.carlosantunes.restaurant.pont.TaxationPrive;
 import com.carlosantunes.restaurant.produit.plat.Plat;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,7 @@ public class RecetteTest {
 
     @Before
     public void setUp() {
-        table = new Table("Lucien", new Date(), TableType.PLAISIR);
+        table = new Table("Lucien", new Date(), TableType.PLAISIR, new TaxationPrive());
     }
 
     @Test

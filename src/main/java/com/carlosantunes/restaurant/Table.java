@@ -20,37 +20,22 @@ public class Table {
     private final List<Produit> produitsConsommes;
 
     // Permet de définir la taxation de la table | pattern Bridge pour définir la taxation
-    private Taxation taxation;
+    private final Taxation taxation;
 
     /**
      * État courant de la table | pattern State pour gérer l'état de la table
+     *
      * @see com.carlosantunes.restaurant.etat.TableState
      */
     private TableState etatDeLaTable;
 
-    /**
-     * Constructeur de la classe Table
-     *
-     * @param client le client de la table
-     * @param date la date de la table
-     * @param type le type de la table
-     */
-    public Table(String client, Date date, TableType type) {
-        this.client = client;
-        this.date = date;
-        this.Type = type;
-        produitsConsommes = new ArrayList<>();
-
-        // Initialisation de l'état courant de la table à "Réservée"
-        this.etatDeLaTable = Reserver.getInstance();
-    }
 
     /**
      * Constructeur bis de la classe Table avec la taxation
      *
-     * @param client le client de la table
-     * @param date la date de la table
-     * @param type le type de la table
+     * @param client   le client de la table
+     * @param date     la date de la table
+     * @param type     le type de la table
      * @param taxation la taxation de la table
      */
     public Table(String client, Date date, TableType type, Taxation taxation) {
@@ -95,7 +80,9 @@ public class Table {
     /**
      * @return la date de la table
      */
-    public TableType getTableType() { return Type; }
+    public TableType getTableType() {
+        return Type;
+    }
 
     public String getDate() {
         String pattern = "dd MMMM yyyy HH:mm:ss";
@@ -124,9 +111,9 @@ public class Table {
     // ======================================== Lab 2 tâche 2 : State pattern ========================================
 
 
-
     /**
      * Vérifie l'état de la table
+     *
      * @return l'état courant de la table
      */
     public TableState getEtatDeLaTable() {
@@ -135,6 +122,7 @@ public class Table {
 
     /**
      * Change l'état de la table
+     *
      * @param etatDeLaTable l'état à définir
      */
     public void setEtatDeLaTable(TableState etatDeLaTable) {
@@ -142,15 +130,7 @@ public class Table {
     }
 
 
-    // ======================================== Lab 4 tâche 1 : Bridge pattern ========================================
-
-    /**
-     * Permet de définir la taxation de la table
-     * @param taxation la taxation à définir
-     */
-    public void setTaxation(Taxation taxation) {
-        this.taxation = taxation;
-    }
+    // ======================================== Lab 4 tâche 1 : Bridge pattern =======================================
 
     /**
      * @return le montant total des produits consommés par table avec la taxation
