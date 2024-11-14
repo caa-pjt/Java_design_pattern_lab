@@ -12,33 +12,30 @@ public class Cloturer extends TableState {
     }
 
     @Override
-    public TableState accueillirClient(Table table) {
+    public void accueillirClient(Table table) {
         try {
             afficheErreur("Erreur : Impossible d'accueillir un client. La table est clôturée.");
         } catch (IllegalStateException e) {
             System.out.println("Message : " + e.getMessage());
         }
-        return this;
     }
 
     @Override
-    public TableState servirProduits(Table table) {
+    public void servirProduits(Table table) {
         try {
             verifierProduitsConsommes(table, "Erreur : Impossible de servir des produits. La table est clôturée.");
         } catch (IllegalStateException e) {
             System.out.println("Message : " + e.getMessage());
         }
-        return this;
     }
 
     @Override
-    public TableState fermer(Table table) {
+    public void fermer(Table table) {
         try {
             afficheErreur("Erreur : Impossible de fermer la table. La table est déjà clôturée.");
         } catch (IllegalStateException e) {
             System.out.println("Message : " + e.getMessage());
         }
-        return this;
     }
 
     @Override
