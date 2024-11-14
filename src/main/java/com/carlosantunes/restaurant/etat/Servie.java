@@ -13,17 +13,16 @@ public class Servie extends TableState {
     }
 
     @Override
-    public TableState accueillirClient(Table table) {
+    public void accueillirClient(Table table) {
         try {
             afficheErreur("Erreur : Impossible d'accueillir un client. La table est déjà occupée.");
         } catch (IllegalStateException e) {
             System.out.println("Message : " + e.getMessage());
         }
-        return this;
     }
 
     @Override
-    public TableState servirProduits(Table table) {
+    public void servirProduits(Table table) {
         try {
             verifierProduitsConsommes(table, "Erreur : Aucun produit n'a été consommé par la table.");
 
@@ -33,26 +32,24 @@ public class Servie extends TableState {
         } catch (IllegalStateException e) {
             System.out.println("Message : " + e.getMessage());
         }
-        return this;
     }
 
     @Override
-    public TableState fermer(Table table) {
+    public void fermer(Table table) {
         try {
             verifierProduitsConsommes(table, "Erreur : Impossible de fermer la table. Aucun produit n'a été consommé.");
 
-            System.out.println("La table est fermée.");
+            System.out.println("Le client ("+table.getClient() +") a fini de consommer et demande et paye l'addition.");
             System.out.println("----------------------------------------");
 
             // Clôture de la table et ajout de la recette
             Recette.getInstance().setTableRecette(table);
 
-            System.out.println("Le client ("+table.getClient() +") a fini de consommer et demande l'addition.");
+            table.setEtatDeLaTable(Cloturer.getInstance());
 
         } catch (IllegalStateException e) {
             System.out.println("Message : " + e.getMessage());
         }
-        return Cloturer.getInstance();
     }
 
     @Override

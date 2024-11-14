@@ -28,4 +28,14 @@ public interface Produit {
      * Affiche les informations du produit.
      */
     void afficher();
+
+    /**
+     * Ajoute un produit au menu.
+     * Cette méthode est implémentée par la classe Menu.
+     * Elle est vide par défaut pour les classes Plat et Boisson.
+     * @param produit Le produit à ajouter au menu (peut être un Plat, une Boisson).
+     */
+    default void ajouterProduit(Produit produit) {
+        throw new UnsupportedOperationException("Impossible d'ajouter un produit à un produit qui n'est pas un menu.");
+    }
 }

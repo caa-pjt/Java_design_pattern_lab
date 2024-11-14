@@ -205,8 +205,8 @@ public class Restaurant {
         //boisson.afficher();
 
         Produit menu = new Menu("Menu du jour", MenuType.PLAISIR);
-        ((Menu) menu).ajouterProduit(plat);
-        ((Menu) menu).ajouterProduit(boisson);
+        menu.ajouterProduit(plat);
+        menu.ajouterProduit(boisson);
         menu.afficher();
 
         menu = new ExtraDose(menu);
@@ -233,41 +233,55 @@ public class Restaurant {
         System.out.println("Tâche 4: State pattern :");
         System.out.println("----------------------------------------");
 
-        Table table1 = new Table("Bob", new Date(), TableType.PLAISIR);
-        table1.ajouterProduit(new Plat("Steak", 12.00, PlatType.RICHE));
-        table1.ajouterProduit(new Boisson("Bière", 2.50, BoissonType.ALCOOLISEE));
 
-        System.out.println("===== ÉTAT DES TABLES =====");
-        System.out.println(table1.getEtatDeLaTable());
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Entrez le nom du client :");
+        String client = scanner.nextLine();
+
+        // Demande du type de table au client et vérification de la validité du type
+        TableType typeTable = null;
+        while (typeTable == null) {
+            try {
+                System.out.println("Entrez le type de table (PLAISIR, DIET, VEGAN):");
+                typeTable = TableType.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Type de table invalide. Veuillez entrer PLAISIR, DIET ou VEGAN.");
+            }
+        }
+
+        // Utilisation de la fabrique pour choisir le type de table
+        CreateurProduit createurType = TableFactory.createTable(typeTable);
+
+        // Création de la table avec l'état "Réservée"
+        Table table = new Table(client, new Date(), typeTable);
+
+        // Création de 2 produits à partir du type de table
+        Plat plat = createurType.creerPlat("Palat de test", 10.80);
+        Boisson boisson = createurType.creerBoisson("Boisson de test", 8.55);
+
+        // Ajout des produits à la table
+        table.ajouterProduit(plat);
+        table.ajouterProduit(boisson);
+
+        restaurant.ajouterTable(table); // Ajout de la table au restaurant
 
 
-        table1.afficherEtat();        // Affiche l'état "Réservée"
-        table1.accueillirClient();    // Passe à l'état "Servie"
+        table.getEtatDeLaTable().afficher(table); // Affichage de l'état de la table
+        table.getEtatDeLaTable().accueillirClient(table); // Passe à l'état "Servie"
 
+        table.getEtatDeLaTable().afficher(table); // Le client est en train de consommer
+        table.getEtatDeLaTable().servirProduits(table); // Affichage des produits servis
 
-        System.out.println("===== ÉTAT DES TABLES =====");
-        System.out.println(table1.getEtatDeLaTable());
+        table.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
+        table.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
 
-
-        table1.afficherEtat();        // Affiche l'état "Servie"
-        table1.servirProduits();      // Actionne le service des produits
-        table1.fermer();              // Passe à l'état "Clôturée"
-        table1.afficherEtat();        // Affiche l'état "Clôturée"
-
-        table1.accueillirClient();    // Impossible : la table est clôturée
-        table1.servirProduits();      // Impossible : la table est clôturée
-
-        Table table2 = new Table("Julien", new Date(), TableType.DIET);
-
-        table2.accueillirClient();  // Passe à l'état "Servie"
-        table2.servirProduits();    // Impossible : aucun produit n'a été consommé
-        table2.fermer();            // Passe à l'état "Clôturée"
-        table2.afficherEtat();      // Affiche l'état "Clôturée"
-
+        table.getEtatDeLaTable().afficher(table); // Le client est en train de consommer
+        table.getEtatDeLaTable().fermer(table); // Passe à l'état "Cloturer"
+        table.getEtatDeLaTable().afficher(table); // Affichage de la facture
 
         System.out.println("===== RECETTE DU RESTAURANT =====");
         // Affichage la recette totale du restaurant
-        Recette.getInstance().afficherStatistiques();
+        restaurant.afficherRecette();
         System.out.println("=================================");
 
     }
@@ -304,7 +318,7 @@ public class Restaurant {
         restaurant.cloturerTable(table2);
 
 
-        restaurant.afficherRecette();
+       restaurant.afficherRecette();
 
     }
 

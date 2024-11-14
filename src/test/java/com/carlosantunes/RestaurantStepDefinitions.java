@@ -20,25 +20,32 @@ import io.cucumber.java.en.*;
 import org.junit.Assert;
 
 import java.util.Date;
-
+import java.util.HashMap;
 public class RestaurantStepDefinitions {
 
     private Restaurant restaurant;
     private Menu menu;
     private Produit produit;
-    private Table table;
-    private Table table2;
-
+    private final HashMap<String, Table> tables = new HashMap<>();
+    private CreateurProduit createurProduit;
 
     @Given("un restaurant vide")
     public void un_restaurant_vide() {
         restaurant = new Restaurant(); // Initie un restaurant vide
     }
 
-    @When("j'ajoute un plat {string} avec un prix de {double} chf")
-    public void jAjouteUnPlatAvecUnPrixDeChf(String nom, double prix) {
-        Plat plat = new Plat(nom, prix, PlatType.VEGAN);
-        restaurant.ajouterProduit(plat);
+    @When("j'ajoute un plat {string} avec un prix de {double} chf a la table du client {string}")
+    public void jAjouteUnPlatAvecUnPrixDeChf(String nom, double prix, String client) {
+        Table table = tables.get(client);
+        Produit plat = createurProduit.creerPlat(nom, prix);
+        table.ajouterProduit(plat);
+    }
+
+    @And("j'ajoute un boisson {string} au montant de {double} CHF à la table du client {string}")
+    public void jAjouteUnBoissonAuMontantDeCHFALaTableDuClient(String nom, double prix, String client) {
+        Table table = tables.get(client);
+        Produit boissons = createurProduit.creerBoisson(nom, prix);
+        table.ajouterProduit(boissons);
     }
 
     @Then("le restaurant contient {int} produit")
@@ -73,36 +80,17 @@ public class RestaurantStepDefinitions {
         Assert.assertEquals(prixTotal, menu.getPrix(), 0.01);
     }
 
-    @When("je cree une table pour le client {string} de type {string}")
-    public void jeCreeUneTablePourLeClientDeType(String client, String type) {
-        table = new Table(client, new Date(), TableType.valueOf(type));
-    }
-
-
-    @And("j'ajoute un plat {string} avec un prix de {double} chf a la table")
-    public void jAjouteUnPlatAvecUnPrixDeChfALaTable(String nom, double prix) {
-        System.out.println("ICI mon type de plat pour ma table :" + table.getTableType());
-        CreateurProduit createurProduit = TableFactory.createTable(table.getTableType());
-        Plat plat = createurProduit.creerPlat(nom, prix);
-        table.ajouterProduit(plat);
-    }
-
-    @And("j'ajoute une boisson {string} avec un prix de {double} chf a la table")
-    public void jAjouteUneBoissonAvecUnPrixDeChfALaTable(String nom, double prix) {
-        // Utiliser le CreateurProduit pour créer dynamiquement le bon type de boisson
-        CreateurProduit createurProduit = TableFactory.createTable(table.getTableType());
-        Boisson boisson = createurProduit.creerBoisson(nom, prix);
-        table.ajouterProduit(boisson);
-    }
-
-    @Then("la table contient {int} produits")
-    public void laTableContientProduits(int nbProduits) {
+    @Then("la table du client {string} contient {int} produits")
+    public void laTableContientProduits(String client, int nbProduits) {
+        Table table = tables.get(client);
         int nombreDeProduits = table.getProduitsConsommes().size();
         Assert.assertEquals(nbProduits, nombreDeProduits);
     }
 
-    @Then("la boisson {string} est de type {string}")
-    public void laBoissonEstDeType(String nomBoisson, String typeBoisson) {
+    @Then("la boisson {string} est de type {string} pour le client {string}")
+    public void laBoissonEstDeType(String nomBoisson, String typeBoisson, String client) {
+
+        Table table = tables.get(client);
 
         Boisson boisson = (Boisson) table.getProduitsConsommes().stream()
                 .filter(produit -> produit.getNom().equals(nomBoisson))
@@ -117,8 +105,9 @@ public class RestaurantStepDefinitions {
 
     }
 
-    @Then("le plat {string} est de type {string}")
-    public void lePlatEstDeType(String nomPlat, String typePlat) {
+    @Then("le plat {string} est de type {string} pour le client {string}")
+    public void lePlatEstDeType(String nomPlat, String typePlat, String client) {
+        Table table = tables.get(client);
         Plat plat = (Plat) table.getProduitsConsommes().stream()
                 .filter(produit -> produit.getNom().equals(nomPlat))
                 .findFirst()
@@ -133,13 +122,17 @@ public class RestaurantStepDefinitions {
     @Given("le restaurant a une table avec le client {string} et des produits")
     public void le_restaurant_a_une_table_avec_le_client_et_des_produits(String client) {
         restaurant = new Restaurant();
-        table = new Table(client, new Date(), TableType.PLAISIR);
-        table.ajouterProduit(new Plat("Pâtes", 12.50, PlatType.RICHE));
-        table.ajouterProduit(new Boisson("Vin", 8.00, BoissonType.ALCOOLISEE));
+
+        // Première table pour client1
+        Table table1 = new Table(client, new Date(), TableType.PLAISIR);
+        tables.put(client, table1); // Ajout de la table au HashMap avec le nom du client1 comme clé
+        table1.ajouterProduit(new Plat("Pâtes", 12.50, PlatType.RICHE));
+        table1.ajouterProduit(new Boisson("Vin", 8.00, BoissonType.ALCOOLISEE));
     }
 
-    @When("la table est clôturée")
-    public void laTableEstCloturee() {
+    @When("la table est clôturée pour le client {string}")
+    public void laTableEstCloturee(String client) {
+        Table table = tables.get(client);
         Recette.getInstance().setTableRecette(table);
     }
 
@@ -157,20 +150,23 @@ public class RestaurantStepDefinitions {
 
         Recette.getInstance().viderRecette(); // Vide la recette avant de commencer
 
-        // Première table
-        table = new Table(client1, new Date(), TableType.PLAISIR);
-        table.ajouterProduit(new Plat("Pâtes", 12.50, PlatType.RICHE));
-        table.ajouterProduit(new Boisson("Vin", 8.00, BoissonType.ALCOOLISEE));
+        // Première table pour client1
+        Table table1 = new Table(client1, new Date(), TableType.PLAISIR);
+        tables.put(client1, table1); // Ajout de la table au HashMap avec le nom du client1 comme clé
+        table1.ajouterProduit(new Plat("Pâtes", 12.50, PlatType.RICHE));
+        table1.ajouterProduit(new Boisson("Vin", 8.00, BoissonType.ALCOOLISEE));
 
-        // Deuxième table
-        table2 = new Table(client2, new Date(), TableType.VEGAN);
+        // Deuxième table pour client2
+        Table table2 = new Table(client2, new Date(), TableType.PLAISIR);
+        tables.put(client2, table2); // Ajout de la table au HashMap avec le nom du client2 comme clé
         table2.ajouterProduit(new Plat("Salade", 7.00, PlatType.VEGAN));
         table2.ajouterProduit(new Boisson("Eau", 3.50, BoissonType.GAZEUSE));
-
     }
 
-    @When("les tables sont clôturées")
-    public void lesTablesSontCloturees() {
+    @When("les tables sont clôturées pour les clients {string} et {string}")
+    public void lesTablesSontCloturees(String client1, String client2) {
+        Table table = tables.get(client1);
+        Table table2 = tables.get(client2);
         Recette.getInstance().setTableRecette(table);
         Recette.getInstance().setTableRecette(table2);
     }
@@ -188,57 +184,70 @@ public class RestaurantStepDefinitions {
 
     }
 
-
-
     // =========== restaurantTableState.feature ===========
-
-    @Given("une table réservée pour {string} de type {string}")
-    public void une_table_reservee_pour(String client, String type) {
-        table = new Table(client, new Date(), TableType.valueOf(type.toUpperCase()));
+    @Given("La table est réservée pour {string} de type {string}")
+    public void laTableReserveePourDeType(String client, String type) {
+        Table nouvelleTable = new Table(client, new Date(), TableType.valueOf(type));
+        tables.put(client, nouvelleTable); // Ajout de la table au HashMap avec le nom du client comme clé
+        System.out.println("Table réservée pour " + client + " de type " + type);
     }
 
-    @When("je accueille le client")
-    public void je_accueille_le_client() {
-        table.accueillirClient();
+    @When("je accueille le client {string}")
+    public void je_accueille_le_client(String client) {
+        Table table = tables.get(client);
+        table.getEtatDeLaTable().accueillirClient(table);
     }
 
-    @Then("la table doit être servie")
-    public void la_table_doit_etre_servie() {
+    @Then("la table doit être servi pour {string}")
+    public void laTableDoitEtreServiPour(String client) {
+        Table table = tables.get(client);
         Assert.assertTrue(table.getEtatDeLaTable() instanceof Servie);
     }
 
-    @When("je sers des produits")
-    public void je_sers_des_produits() {
-        table.accueillirClient();
-        table.servirProduits();
+    @When("je ferme la table pour {string}")
+    public void je_ferme_la_table(String client) {
+        Table table = tables.get(client);
+        table.getEtatDeLaTable().fermer(table);
     }
 
-    @When("je ferme la table")
-    public void je_ferme_la_table() {
-        table.fermer();
-    }
-
-    @Then("la table doit être clôturée")
-    public void la_table_doit_etre_cloturee() {
+    @Then("la table doit être clôturée pour {string}")
+    public void la_table_doit_etre_cloturee(String client) {
+        Table table = tables.get(client);
         Assert.assertTrue(table.getEtatDeLaTable() instanceof Cloturer);
     }
 
-    @When("j'ajoute un produit {string} au montant de {double} CHF")
-    public void jAjouteUnProduitAuMontantDeCHF(String nomProduit, double montant) {
-        Produit produitAAjouter = new Plat(nomProduit, montant, PlatType.RICHE);
-        table.ajouterProduit(produitAAjouter);
+    @And("j'ajoute un produit {string} au montant de {double} CHF à la table du client {string}")
+    public void jAjouteUnProduitAuMontantDeCHFALaTableDuClient(String nomProduit, double montant, String client) {
+        Table table = tables.get(client);
+        Produit produitAjouter = new Plat(nomProduit, montant, PlatType.RICHE);
+        table.ajouterProduit(produitAjouter);
     }
 
-    @Then("les produits consommés doivent inclure {string}")
-    public void les_produits_consommes_doivent_inclure(String nomProduit) {
+    @And("les produits consommés à la table su client {string} doivent inclure {string}")
+    public void lesProduitsConsommesALaTableSuClientDoiventInclure(String client, String nomProduit) {
+        Table table = tables.get(client);
         boolean found = table.getProduitsConsommes().stream()
                 .anyMatch(produit -> produit.getNom().equals(nomProduit));
         Assert.assertTrue(found);
     }
 
-    @And("je peux servir des produits")
-    public void jePeuxServirDesProduits() {
+    @And("je peux servir des produits pour {string}")
+    public void jePeuxServirDesProduits(String client) {
+        Table table = tables.get(client);
         Assert.assertTrue(table.getEtatDeLaTable() instanceof Servie);
+    }
+
+    @When("La table de type {string} est réservée pour {string}")
+    public void laTableDeTypePLAISIREstReserveePour(String typeTable, String client) {
+        createurProduit = TableFactory.createTable(TableType.valueOf(typeTable));
+        Table table = new Table(client, new Date(), TableType.valueOf(typeTable));
+        tables.put(client, table);
+    }
+
+    @When("j'ajoute un plat {string} avec un prix de {double} chf")
+    public void jAjouteUnPlatAvecUnPrixDeChf(String nom, double prix) {
+        Produit plat = new Plat(nom, prix, PlatType.RICHE);
+        restaurant.ajouterProduit(plat);
     }
 
     // =========== restaurantProduitDecorator.feature ===========
