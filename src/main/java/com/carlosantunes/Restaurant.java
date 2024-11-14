@@ -6,8 +6,6 @@ import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.enums.MenuType;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.enums.TableType;
-import com.carlosantunes.restaurant.etat.Reserver;
-import com.carlosantunes.restaurant.etat.Servie;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
 import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
@@ -215,7 +213,7 @@ public class Restaurant {
     }
 
     /*
-        Lab 2 - Tâche 1 : Singleton pattern
+        Tâche 3 : Singleton pattern
 
             1. Création de tables pour le restaurant
             2. Ajout de produits aux tables
