@@ -173,8 +173,8 @@ public class Restaurant {
         //boisson.afficher();
 
         Produit menu = new Menu("Menu du jour", MenuType.PLAISIR);
-        ((Menu) menu).ajouterProduit(plat);
-        ((Menu) menu).ajouterProduit(boisson);
+        menu.ajouterProduit(plat);
+        menu.ajouterProduit(boisson);
         menu.afficher();
 
         menu = new ExtraDose(menu);

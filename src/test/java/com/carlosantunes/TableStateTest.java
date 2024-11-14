@@ -91,8 +91,8 @@ public class TableStateTest {
         table2.getEtatDeLaTable().servirProduits(table2); // Simule le service des produits
 
         // Test si les tables sont indépendantes
-        Assert.assertEquals(table1.getTableType(), TableType.VEGAN);
-        assertEquals(table2.getTableType(), TableType.PLAISIR);
+        assertEquals(TableType.VEGAN, table1.getTableType());
+        assertEquals(TableType.PLAISIR, table2.getTableType());
 
         // Test si les états sont indépendants
         assertInstanceOf(Cloturer.class, table1.getEtatDeLaTable());
