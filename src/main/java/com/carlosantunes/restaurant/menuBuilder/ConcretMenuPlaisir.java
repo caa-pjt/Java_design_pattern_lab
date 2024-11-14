@@ -9,20 +9,19 @@ import com.carlosantunes.restaurant.produit.Produit;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ConcretMenuPlaisir implements Builder {
 
     private final Menu menu;
     private final CreateurProduit createurType;
-    private final Random random;
+    private final SecureRandom random;
 
     public ConcretMenuPlaisir(String nom) {
         this.menu = new Menu(nom, MenuType.PLAISIR);
         this.createurType = TableFactory.createTable(TableType.PLAISIR);
-        this.random = new Random();
+        this.random = new SecureRandom();
 
     }
 
@@ -46,7 +45,7 @@ public class ConcretMenuPlaisir implements Builder {
      */
     private double obtenirPrixAleatoire(double min, double max) {
         // Générer un prix aléatoire entre 3.0 et 10.0
-        double prixAleatoire = ThreadLocalRandom.current().nextDouble(min, max);
+        double prixAleatoire = min + (max - min) * this.random.nextDouble();
 
         // Arrondir au multiple de 0.05 le plus proche et formater à 2 décimales
         prixAleatoire = Math.round(prixAleatoire * 20) / 20.0;
