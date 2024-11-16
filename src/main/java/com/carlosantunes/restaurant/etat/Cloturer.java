@@ -1,12 +1,10 @@
 package com.carlosantunes.restaurant.etat;
 
+import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.Table;
 
 public class Cloturer extends TableState {
     private static final Cloturer instance = new Cloturer();
-
-    private Cloturer() {
-    }
 
     public static Cloturer getInstance() {
         return instance;
@@ -34,6 +32,10 @@ public class Cloturer extends TableState {
     public void fermer(Table table) {
         try {
             afficheErreur("Erreur : Impossible de fermer la table. La table est déjà clôturée.");
+
+            // La table n'est plus observée par la recette après la clôture
+            table.supprimerObserver(Recette.getInstance());
+
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }

@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class Table implements Sujet {
+public class Table implements Sujet<Table> {
     private final String client;
     private final Date date;
     private final TableType tableType;
@@ -24,8 +24,8 @@ public class Table implements Sujet {
     // Permet de définir la taxation de la table | pattern Bridge pour définir la taxation
     private final Taxation taxation;
 
-    // Liste des observateurs de la table
-    private final List<Subscriber> observeurs = new ArrayList<>();
+    // Liste des abonnés à la table
+    private final List<Subscriber<Table>> subscriberList = new ArrayList<>();
 
     /**
      * État courant de la table | pattern State pour gérer l'état de la table
@@ -40,13 +40,13 @@ public class Table implements Sujet {
      *
      * @param client    le client de la table
      * @param date      la date de la table
-     * @param TableType le type de la table
+     * @param tableType le type de la table
      * @param taxation  la taxation de la table
      */
-    public Table(String client, Date date, TableType TableType, Taxation taxation) {
+    public Table(String client, Date date, TableType tableType, Taxation taxation) {
         this.client = client;
         this.date = date;
-        this.tableType = TableType;
+        this.tableType = tableType;
         produitsConsommes = new ArrayList<>();
 
         // Initialisation de l'état courant de la table à "Réservée"
@@ -146,19 +146,19 @@ public class Table implements Sujet {
     // ======================================== Lab 4 tâche 2 : Observer pattern =======================================
 
     @Override
-    public void ajouterObserveur(Subscriber observeur) {
-        observeurs.add(observeur);
+    public void ajouterObserver(Subscriber<Table> observer) {
+        subscriberList.add(observer);
     }
 
     @Override
-    public void supprimerObserveur(Subscriber observeur) {
-        observeurs.remove(observeur);
+    public void supprimerObserver(Subscriber<Table> observer) {
+        subscriberList.remove(observer);
     }
 
     @Override
-    public void notifier() {
-        for (Subscriber observeur : observeurs) {
-            observeur.update(this);
+    public void notifier(String message) {
+        for (Subscriber<Table> observeur : subscriberList) {
+            observeur.update(message, this);
         }
     }
 }

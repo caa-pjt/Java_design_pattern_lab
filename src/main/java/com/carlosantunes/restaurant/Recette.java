@@ -12,7 +12,7 @@ import java.util.List;
  * Le type de table,
  * Le montant de l'addition.
  */
-public final class Recette implements Subscriber {
+public final class Recette implements Subscriber<Table> {
 
     private static final String DEVISE = "CHF";
 
@@ -83,15 +83,11 @@ public final class Recette implements Subscriber {
 
     }
 
-    /**
-     * Méthode de l'interface Observer pour notifier la recette d'une table clôturée.
-     *
-     * @param table La table clôturée.
-     */
+    
     @Override
-    public void update(Table table) {
-        if (table != null) {
-            setTableRecette(table);
+    public void update(String message, Table args) {
+        if (message.equals("clotureTable")) {
+            setTableRecette(args);
         }
     }
 

@@ -204,10 +204,14 @@ public class Restaurant {
         table.getEtatDeLaTable().servirProduits(table); // Affichage des produits servis
         table.getEtatDeLaTable().fermer(table); // Passe à l'état "Cloturer"
 
+        // Creation d'une deuxième table
+        CreateurProduit createurType2 = TableFactory.createTable(TableType.VEGAN);
         Table table2 = new Table("Alice", new Date(), TableType.VEGAN, new TaxationPrive());
         restaurant.ajouterTable(table2); // Ajout de la table au restaurant
-        table2.ajouterProduit(new Plat("Salade", 5.50, PlatType.VEGAN));
-        table2.ajouterProduit(new Boisson("Eau", 1.00, BoissonType.GAZEUSE));
+        Plat plat2 = createurType2.creerPlat("Salade verte", 5.50);
+        Boisson boisson2 = createurType2.creerBoisson("Eau", 1.00);
+        table2.ajouterProduit(plat2);
+        table2.ajouterProduit(boisson2);
 
         table2.getEtatDeLaTable().accueillirClient(table2); // Passe à l'état "Servie"
         table2.getEtatDeLaTable().servirProduits(table2); // Affichage des produits servis

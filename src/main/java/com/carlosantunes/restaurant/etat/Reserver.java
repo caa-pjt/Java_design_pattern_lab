@@ -14,7 +14,7 @@ public class Reserver extends TableState {
     public void accueillirClient(Table table) {
         System.out.println("Le client est accueilli à la table " + table.getTableType());
         // La table est observée.
-        table.ajouterObserveur(Recette.getInstance());
+        table.ajouterObserver(Recette.getInstance());
         // Changement de l'état de la table à "Servie"
         table.setEtatDeLaTable(Servie.getInstance());
     }

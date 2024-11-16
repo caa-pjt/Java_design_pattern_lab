@@ -1,10 +1,15 @@
 package com.carlosantunes.restaurant.observeur;
 
-import com.carlosantunes.restaurant.Table;
-
 /**
  * Interface pour les abonnés qui souhaitent être notifiés des changements de la table.
  */
-public interface Subscriber {
-    void update(Table table);
+public interface Subscriber<T> {
+
+    /**
+     * Met à jour l'abonné avec un message et des arguments.
+     *
+     * @param message le message à afficher
+     * @param args    les arguments à afficher (objet)
+     */
+    void update(String message, T args);
 }

@@ -40,7 +40,7 @@ public class Servie extends TableState {
             System.out.println("----------------------------------------");
 
             // Clôture de la table et notification de la recette pour enregistrer les informations
-            table.notifier();
+            table.notifier("clotureTable");
 
             // Changement de l'état de la table à "Clôturée"
             table.setEtatDeLaTable(Cloturer.getInstance());

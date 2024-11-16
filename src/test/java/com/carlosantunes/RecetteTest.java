@@ -48,7 +48,7 @@ public class RecetteTest {
         Plat plat = new Plat("Pâtes", 12.50, PlatType.RICHE);
         table.ajouterProduit(plat);
         Recette.getInstance().setTableRecette(table);
-        Table table = Recette.getInstance().getListeTablesCloturees().stream().findFirst().orElseThrow();
+        table = Recette.getInstance().getListeTablesCloturees().stream().findFirst().orElseThrow();
         assertEquals(12.50, table.getMontant(), 0.01);
     }
 
