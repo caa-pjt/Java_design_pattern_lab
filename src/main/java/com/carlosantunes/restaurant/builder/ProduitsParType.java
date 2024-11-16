@@ -1,4 +1,4 @@
-package com.carlosantunes.restaurant.menuBuilder;
+package com.carlosantunes.restaurant.builder;
 
 import com.carlosantunes.restaurant.enums.MenuType;
 
@@ -13,6 +13,10 @@ public class ProduitsParType {
     private static final Map<MenuType, List<String>> platsParType = new EnumMap<>(MenuType.class);
     private static final Map<MenuType, List<String>> dessertsParType = new EnumMap<>(MenuType.class);
     private static final Map<MenuType, List<String>> boissonsParType = new EnumMap<>(MenuType.class);
+
+    private ProduitsParType() {
+        throw new IllegalStateException("Utility class");
+    }
 
     static {
         // Initialisation des entrées par type de menu

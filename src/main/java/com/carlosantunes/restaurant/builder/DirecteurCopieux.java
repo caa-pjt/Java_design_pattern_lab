@@ -1,4 +1,4 @@
-package com.carlosantunes.restaurant.menuBuilder;
+package com.carlosantunes.restaurant.builder;
 
 import com.carlosantunes.restaurant.produit.Menu;
 
@@ -8,9 +8,6 @@ public class DirecteurCopieux implements Directeur {
 
     public DirecteurCopieux(Builder builder) {
         this.builder = builder;
-        System.out.println("----------------------------------");
-        System.out.println("Menu : " + builder.getMenu().getNom());
-        System.out.println("----------------------------------");
     }
 
     public Menu construireMenu() {

@@ -23,9 +23,8 @@ public class Servie extends TableState {
         try {
             verifierProduitsConsommes(table, "Erreur : Aucun produit n'a été consommé par la table.");
 
-            System.out.println("Les produits sont servis :");
-            table.afficherProduitsConsommes();
-            System.out.println("----------------------------------------");
+            System.out.println("Les produits sont servis à la table de " + table.getClient());
+
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }

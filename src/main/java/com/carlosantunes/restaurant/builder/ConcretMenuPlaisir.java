@@ -1,4 +1,4 @@
-package com.carlosantunes.restaurant.menuBuilder;
+package com.carlosantunes.restaurant.builder;
 
 import com.carlosantunes.restaurant.TableFactory;
 import com.carlosantunes.restaurant.enums.MenuType;
@@ -12,25 +12,27 @@ import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.util.List;
 
-public class ConcretMenuVegan implements Builder {
+public class ConcretMenuPlaisir implements Builder {
 
     private final Menu menu;
     private final CreateurProduit createurType;
     private final SecureRandom random;
 
-    public ConcretMenuVegan(String nom) {
-        this.menu = new Menu(nom, MenuType.VEGAN);
-        this.createurType = TableFactory.createTable(TableType.VEGAN);
+    public ConcretMenuPlaisir(String nom) {
+        this.menu = new Menu(nom, MenuType.PLAISIR);
+        this.createurType = TableFactory.createTable(TableType.PLAISIR);
         this.random = new SecureRandom();
+
     }
 
     /**
      * Obtenir un produit aléatoire parmi une liste de produits
+     *
      * @param produits Liste de produits
      * @return Produit aléatoire
      */
     private String obtenirProduitAleatoire(List<String> produits) {
-        if(produits.isEmpty()) {
+        if (produits.isEmpty()) {
             throw new IllegalArgumentException("Aucun produit disponible pour le type spécifié");
         }
         return produits.get(random.nextInt(produits.size()));
@@ -38,6 +40,7 @@ public class ConcretMenuVegan implements Builder {
 
     /**
      * Génère un prix aléatoire entre min et max, arrondi au multiple de 0.05 le plus proche et formaté à 2 décimales
+     *
      * @param min Prix minimum
      * @param max Prix maximum
      * @return Prix aléatoire
@@ -55,7 +58,7 @@ public class ConcretMenuVegan implements Builder {
 
     @Override
     public void construireEntree() {
-        String nomEntree = obtenirProduitAleatoire(ProduitsParType.obtenirEntreesParType(MenuType.VEGAN));
+        String nomEntree = obtenirProduitAleatoire(ProduitsParType.obtenirEntreesParType(MenuType.PLAISIR));
         double prix = obtenirPrixAleatoire(3.0, 10.0);
         Produit entree = createurType.creerPlat(nomEntree, prix);
         menu.ajouterProduit(entree);
@@ -63,7 +66,7 @@ public class ConcretMenuVegan implements Builder {
 
     @Override
     public void construirePlat() {
-        String nomPlat = obtenirProduitAleatoire(ProduitsParType.obtenirPlatsParType(MenuType.VEGAN));
+        String nomPlat = obtenirProduitAleatoire(ProduitsParType.obtenirPlatsParType(MenuType.PLAISIR));
         double prix = obtenirPrixAleatoire(10.0, 20.0);
         Produit plat = createurType.creerPlat(nomPlat, prix);
         menu.ajouterProduit(plat);
@@ -71,7 +74,7 @@ public class ConcretMenuVegan implements Builder {
 
     @Override
     public void construireDessert() {
-        String nomDessert = obtenirProduitAleatoire(ProduitsParType.obtenirDessertsParType(MenuType.VEGAN));
+        String nomDessert = obtenirProduitAleatoire(ProduitsParType.obtenirDessertsParType(MenuType.PLAISIR));
         double prix = obtenirPrixAleatoire(3.0, 10.0);
         Produit dessert = createurType.creerPlat(nomDessert, prix);
         menu.ajouterProduit(dessert);
@@ -79,8 +82,8 @@ public class ConcretMenuVegan implements Builder {
 
     @Override
     public void construireBoisson() {
-        String nomBoisson = obtenirProduitAleatoire(ProduitsParType.obtenirBoissonsParType(MenuType.VEGAN));
-        double prix = obtenirPrixAleatoire(2.0, 5.0);
+        String nomBoisson = obtenirProduitAleatoire(ProduitsParType.obtenirBoissonsParType(MenuType.PLAISIR));
+        double prix = obtenirPrixAleatoire(10.0, 50.0);
         Produit boisson = createurType.creerBoisson(nomBoisson, prix);
         menu.ajouterProduit(boisson);
     }
@@ -89,6 +92,4 @@ public class ConcretMenuVegan implements Builder {
     public Menu getMenu() {
         return menu;
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.carlosantunes.restaurant.menuBuilder;
+package com.carlosantunes.restaurant.builder;
 
 import com.carlosantunes.restaurant.produit.Menu;
 

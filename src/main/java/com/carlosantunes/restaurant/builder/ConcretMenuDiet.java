@@ -1,4 +1,4 @@
-package com.carlosantunes.restaurant.menuBuilder;
+package com.carlosantunes.restaurant.builder;
 
 import com.carlosantunes.restaurant.TableFactory;
 import com.carlosantunes.restaurant.enums.MenuType;
@@ -26,18 +26,20 @@ public class ConcretMenuDiet implements Builder {
 
     /**
      * Obtenir un produit aléatoire parmi une liste de produits
+     *
      * @param produits Liste de produits
      * @return Produit aléatoire
      */
     private String obtenirProduitAleatoire(List<String> produits) {
-       if(produits.isEmpty()) {
-           throw new IllegalArgumentException("Aucun produit disponible pour le type spécifié");
-       }
+        if (produits.isEmpty()) {
+            throw new IllegalArgumentException("Aucun produit disponible pour le type spécifié");
+        }
         return produits.get(random.nextInt(produits.size()));
     }
 
     /**
      * Génère un prix aléatoire entre min et max, arrondi au multiple de 0.05 le plus proche et formaté à 2 décimales
+     *
      * @param min Prix minimum
      * @param max Prix maximum
      * @return Prix aléatoire
@@ -56,7 +58,7 @@ public class ConcretMenuDiet implements Builder {
     @Override
     public void construireEntree() {
         String nomEntree = obtenirProduitAleatoire(ProduitsParType.obtenirEntreesParType(MenuType.DIET));
-        double prix =obtenirPrixAleatoire(3.0, 10.0);
+        double prix = obtenirPrixAleatoire(3.0, 10.0);
         Produit entree = createurType.creerPlat(nomEntree, prix);
         menu.ajouterProduit(entree);
     }
@@ -64,7 +66,7 @@ public class ConcretMenuDiet implements Builder {
     @Override
     public void construirePlat() {
         String nomPlat = obtenirProduitAleatoire(ProduitsParType.obtenirPlatsParType(MenuType.DIET));
-        double prix =obtenirPrixAleatoire(10.0, 20.0);
+        double prix = obtenirPrixAleatoire(10.0, 20.0);
         Produit plat = createurType.creerPlat(nomPlat, prix);
         menu.ajouterProduit(plat);
     }
@@ -72,7 +74,7 @@ public class ConcretMenuDiet implements Builder {
     @Override
     public void construireDessert() {
         String nomDessert = obtenirProduitAleatoire(ProduitsParType.obtenirDessertsParType(MenuType.DIET));
-        double prix =obtenirPrixAleatoire(3.0, 10.0);
+        double prix = obtenirPrixAleatoire(3.0, 10.0);
         Produit dessert = createurType.creerPlat(nomDessert, prix);
         menu.ajouterProduit(dessert);
     }
@@ -80,7 +82,7 @@ public class ConcretMenuDiet implements Builder {
     @Override
     public void construireBoisson() {
         String nomBoisson = obtenirProduitAleatoire(ProduitsParType.obtenirBoissonsParType(MenuType.DIET));
-        double prix =obtenirPrixAleatoire(2.0, 5.0);
+        double prix = obtenirPrixAleatoire(2.0, 5.0);
         Produit boisson = createurType.creerBoisson(nomBoisson, prix);
         menu.ajouterProduit(boisson);
     }

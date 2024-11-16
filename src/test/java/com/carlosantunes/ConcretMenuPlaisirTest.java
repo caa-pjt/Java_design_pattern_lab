@@ -1,16 +1,16 @@
 package com.carlosantunes;
 
-import com.carlosantunes.restaurant.menuBuilder.Builder;
-import com.carlosantunes.restaurant.menuBuilder.ConcretMenuPlaisir;
-import com.carlosantunes.restaurant.menuBuilder.DirecteurCopieux;
+import com.carlosantunes.restaurant.builder.Builder;
+import com.carlosantunes.restaurant.builder.ConcretMenuPlaisir;
+import com.carlosantunes.restaurant.builder.DirecteurCopieux;
 import com.carlosantunes.restaurant.produit.Menu;
 import com.carlosantunes.restaurant.produit.boisson.BoissonAlcoolisee;
 import com.carlosantunes.restaurant.produit.plat.PlatRiche;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class ConcretMenuPlaisirTest {
+class ConcretMenuPlaisirTest {
 
     private Builder builderPlaisir;
 
@@ -21,7 +21,7 @@ public class ConcretMenuPlaisirTest {
 
 
     @Test
-    public void testConstruireMenuPlaisir() {
+    void testConstruireMenuPlaisir() {
         // Construire le menu Plaisir
         DirecteurCopieux directeurCopieux = new DirecteurCopieux(builderPlaisir);
         Menu menuPlaisir = directeurCopieux.construireMenu();

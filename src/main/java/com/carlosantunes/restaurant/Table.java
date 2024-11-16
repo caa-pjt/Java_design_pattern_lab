@@ -9,6 +9,8 @@ import com.carlosantunes.restaurant.pont.Taxation;
 import com.carlosantunes.restaurant.produit.Produit;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,6 +94,13 @@ public class Table implements Sujet<Table> {
         String pattern = "dd MMMM yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("fr", "FR"));
         return simpleDateFormat.format(date);
+    }
+
+    /**
+     * @return la date de la table sous forme de LocalDate
+     */
+    public LocalDate getLocalDate() {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     /**
