@@ -6,15 +6,17 @@ import com.carlosantunes.restaurant.Table;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class RecetteIteratorParMois implements Iterateur<Table> {
-    private final int month;
-    private int index;
-    List<Table> tableList;
+/**
+ * Itérateur pour obtenir les tables clôturées avec un montant supérieur à 50 CHF.
+ */
+public class RecetteIteratorMontantSuperieurA50 implements Iterateur<Table> {
 
-    public RecetteIteratorParMois(Recette recette, int month) {
-        this.tableList = recette.getListeTablesCloturees();
-        this.month = month;
+    private int index;
+    private final List<Table> tableList;
+
+    public RecetteIteratorMontantSuperieurA50(Recette recette) {
         this.index = 0;
+        this.tableList = recette.getListeTablesCloturees();
     }
 
     @Override
@@ -30,10 +32,13 @@ public class RecetteIteratorParMois implements Iterateur<Table> {
 
     @Override
     public Table next() {
-        if (hasNext()) {
-            return tableList.get(index++);
+        while (index < tableList.size()) {
+            Table table = tableList.get(index++);
+            if (isValid(table)) {
+                return table;
+            }
         }
-        throw new NoSuchElementException("Il n'y a plus de tables clôturées pour le mois " + month + ".");
+        throw new NoSuchElementException("Il n'y a plus de tables clôturées avec un montant supérieur à 50 CHF.");
     }
 
     /**
@@ -43,6 +48,6 @@ public class RecetteIteratorParMois implements Iterateur<Table> {
      * @return true si le montant est supérieur à 50 CHF, false sinon.
      */
     private boolean isValid(Table table) {
-        return table.getLocalDate().getMonthValue() == month;
+        return table.getMontant() > 50;
     }
 }

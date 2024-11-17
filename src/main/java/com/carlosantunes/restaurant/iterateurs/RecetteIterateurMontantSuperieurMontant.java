@@ -6,16 +6,15 @@ import com.carlosantunes.restaurant.Table;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/**
- * Itérateur pour obtenir les tables clôturées avec un montant supérieur à 50 CHF.
- */
-public class RecetteIteratorParPrix implements RecetteIterateur<Table> {
+public class RecetteIterateurMontantSuperieurMontant implements Iterateur<Table> {
 
     private int index;
+    private final double montant;
     private final List<Table> tableList;
 
-    public RecetteIteratorParPrix(Recette recette) {
+    public RecetteIterateurMontantSuperieurMontant(Recette recette, double montant) {
         this.index = 0;
+        this.montant = montant;
         this.tableList = recette.getListeTablesCloturees();
     }
 
@@ -45,9 +44,10 @@ public class RecetteIteratorParPrix implements RecetteIterateur<Table> {
      * Vérifie si le montant de la table est supérieur à 50 CHF.
      *
      * @param table La table courante à vérifier.
-     * @return true si le montant est supérieur à 50 CHF, false sinon.
+     * @return true si le montant est supérieur au montant donné, false sinon.
      */
     private boolean isValid(Table table) {
-        return table.getMontant() > 50;
+        return table.getMontant() > this.montant;
     }
 }
+

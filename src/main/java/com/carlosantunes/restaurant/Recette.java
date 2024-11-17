@@ -1,8 +1,10 @@
 package com.carlosantunes.restaurant;
 
+import com.carlosantunes.restaurant.iterateurs.*;
 import com.carlosantunes.restaurant.observeur.Subscriber;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -12,7 +14,7 @@ import java.util.List;
  * Le type de table,
  * Le montant de l'addition.
  */
-public final class Recette implements Subscriber<Table> {
+public final class Recette implements Subscriber<Table>, RecetteIterateur {
 
     private static final String DEVISE = "CHF";
 
@@ -83,7 +85,7 @@ public final class Recette implements Subscriber<Table> {
 
     }
 
-    
+
     @Override
     public void update(String message, Table args) {
         if (message.equals("clotureTable")) {
@@ -110,5 +112,21 @@ public final class Recette implements Subscriber<Table> {
         synchronized (this) {
             historiqueTablesCloturees.clear();
         }
+    }
+
+
+    @Override
+    public Iterator<Table> recetteIterateurParMois(int month) {
+        return new RecetteIteratorParMois(this, month);
+    }
+
+    @Override
+    public Iterator<Table> recetteIteratorMontantSuperieurA50() {
+        return new RecetteIteratorMontantSuperieurA50(this);
+    }
+
+    @Override
+    public Iterateur<Table> recetteIterateurMontantSuperieurMontant(double montant) {
+        return new RecetteIterateurMontantSuperieurMontant(this, montant);
     }
 }

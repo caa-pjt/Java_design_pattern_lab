@@ -1,17 +1,14 @@
 package com.carlosantunes.restaurant.iterateurs;
 
+import com.carlosantunes.restaurant.Table;
+
 import java.util.Iterator;
 
-public interface RecetteIterateur<T> extends Iterator<T> {
+public interface RecetteIterateur {
 
-    /**
-     * @return true si l'itérateur a un élément suivant, false sinon.
-     */
-    boolean hasNext();
+    Iterator<Table> recetteIterateurParMois(int month);
 
-    /**
-     * @return L'élément suivant de l'itérateur.
-     */
-    T next();
+    Iterator<Table> recetteIteratorMontantSuperieurA50();
 
+    Iterateur<Table> recetteIterateurMontantSuperieurMontant(double montant);
 }

@@ -11,9 +11,6 @@ import com.carlosantunes.restaurant.enums.MenuType;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.enums.TableType;
 import com.carlosantunes.restaurant.fabrique.CreateurProduit;
-import com.carlosantunes.restaurant.iterateurs.RecetteIterateur;
-import com.carlosantunes.restaurant.iterateurs.RecetteIteratorParMois;
-import com.carlosantunes.restaurant.iterateurs.RecetteIteratorParPrix;
 import com.carlosantunes.restaurant.pont.TaxationEntreprise;
 import com.carlosantunes.restaurant.pont.TaxationPrive;
 import com.carlosantunes.restaurant.produit.Menu;
@@ -23,10 +20,7 @@ import com.carlosantunes.restaurant.produit.plat.Plat;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * La classe Restaurant représente un restaurant qui gère une liste de produits (plats, boissons, menus).
@@ -173,59 +167,41 @@ public class Restaurant {
         tache9(restaurant);
     }
 
+    /*
+     * Lab 5 - Tâche 1 : Iterator pattern
+     *
+     * 1. Création de menus Diet, Plaisir et Vegan selon le Builder pattern Normal et Copieux
+     * 2. Ajout des menus au restaurant
+     * 3. Création de tables privées et d'entreprise
+     * 4. Ajout des menus aux tables
+     * 5. Changement d'état des tables : Réservée, Servie, Clôturée
+     * 6. Utilisation de l'itérateur pour afficher les tables clôturées de plus de 50 CHF
+     * 7. Utilisation de l'itérateur pour afficher les tables clôturées pour un mois donné
+     * 8. Utilisation de l'itérateur pour afficher les tables clôturées avec un montant supérieur à 20 CHF
+     */
     private static void tache9(Restaurant restaurant) {
 
         System.out.println("----------------------------------------");
         System.out.println("Tâche 9: Iterator pattern :");
         System.out.println("----------------------------------------");
 
-        // Menu Normal Diet
-        Builder builderDiet = new ConcretMenuDiet("Menu Diet");
-        DirecteurNormal directeurNormal = new DirecteurNormal(builderDiet);
-        Produit menuDiet = directeurNormal.construireMenu();
-        // Menu Copieux Plaisir
-        Builder builderPlaisir = new ConcretMenuPlaisir("Menu Plaisir");
-        DirecteurCopieux directeurCopieux = new DirecteurCopieux(builderPlaisir);
-        Produit menuPlaisir = directeurCopieux.construireMenu();
 
-        Builder builderPlaisir2 = new ConcretMenuPlaisir("Menu Copieux");
-        DirecteurCopieux directeurCopieux2 = new DirecteurCopieux(builderPlaisir2);
-        Produit menuPlaisir2 = directeurCopieux2.construireMenu();
+        /// Créer et ajouter des menus
+        ajouterMenusAuRestaurant(restaurant);
 
-        // Ajout des menus au restaurant
-        restaurant.ajouterProduit(menuDiet);
-        restaurant.ajouterProduit(menuPlaisir);
-        restaurant.ajouterProduit(menuPlaisir2);
+        // Créer et ajouter des tables
+        ajouterTablesAuRestaurant(restaurant);
 
-        // Création de tables privées et d'entreprise
-        Table table1 = new Table("Sophie", new Date(), TableType.VEGAN, new TaxationPrive());
-        Table table2 = new Table("Bob", new Date(), TableType.PLAISIR, new TaxationEntreprise());
+        // Servir et fermer les tables
+        gererTables(restaurant);
 
-        LocalDate dateEnoctobre = LocalDate.of(2024, 10, 16);
-        Date date = Date.from(dateEnoctobre.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        Table table3 = new Table("Charlie", date, TableType.PLAISIR, new TaxationEntreprise());
-
-        // Ajout des tables au restaurant
-        restaurant.ajouterTable(table1);
-        restaurant.ajouterTable(table2);
-        restaurant.ajouterTable(table3);
-
-        for (Table table : restaurant.tables) {
-            int index = restaurant.tables.indexOf(table);
-            table.ajouterProduit(restaurant.produits.get(index));
-
-            table.getEtatDeLaTable().accueillirClient(table);
-            table.getEtatDeLaTable().servirProduits(table);
-            table.getEtatDeLaTable().fermer(table);
-        }
-
-        // Affichage la recette totale du restaurant
+        // Afficher la recette totale du restaurant
         restaurant.afficherRecette();
 
-        // Utilisation de l'itérateur pour afficher les tables clôturées
-        RecetteIterateur<Table> iteratorOver50 = new RecetteIteratorParPrix(Recette.getInstance());
-        RecetteIterateur<Table> iteratorByMonth = new RecetteIteratorParMois(Recette.getInstance(), 10); // Par exemple, mai
+        // Utiliser l'itérateur pour afficher les tables clôturées
+        Iterator<Table> iteratorOver50 = Recette.getInstance().recetteIteratorMontantSuperieurA50();
+        Iterator<Table> iteratorByMonth = Recette.getInstance().recetteIterateurParMois(10);
+        Iterator<Table> iteratorMontantSuperiorMontant = Recette.getInstance().recetteIterateurMontantSuperieurMontant(20.0);
 
         System.out.println("===== TABLES CLÔTURÉES DE PLUS DE 50 CHF =====");
         while (iteratorOver50.hasNext()) {
@@ -237,6 +213,12 @@ public class Restaurant {
         while (iteratorByMonth.hasNext()) {
             Table table = iteratorByMonth.next();
             System.out.println("Table clôturée le : " + table.getLocalDate() + " - " + table.getClient() + " - " + table.getMontant() + " CHF");
+        }
+
+        System.out.println("===== TABLES CLÔTURÉES AVEC UN MONANT SUPÉRIEUR À 20 CHF =====");
+        while (iteratorMontantSuperiorMontant.hasNext()) {
+            Table table = iteratorMontantSuperiorMontant.next();
+            System.out.println("Table de plus de 20 CHF : " + table.getClient() + " - " + table.getMontant() + " CHF");
         }
     }
 
@@ -616,7 +598,7 @@ public class Restaurant {
         // Demande du prix du produit
         System.out.println("Entrez le prix du " + typeProduit + " commandé:");
         String prixString = "";
-        while (prixString.isEmpty() || !prixString.matches("^\\D+$")) {
+        while (prixString.isEmpty() || !prixString.matches("^[0-9]+$")) {
             prixString = scanner.nextLine();
         }
 
@@ -624,6 +606,41 @@ public class Restaurant {
         prixString = prixString.replace(',', '.');
 
         return new String[]{nom, prixString};
+    }
+
+    private static void ajouterMenusAuRestaurant(Restaurant restaurant) {
+        List<Produit> menus = List.of(
+                new DirecteurNormal(new ConcretMenuDiet("Menu Diet")).construireMenu(),
+                new DirecteurCopieux(new ConcretMenuPlaisir("Menu Plaisir")).construireMenu(),
+                new DirecteurCopieux(new ConcretMenuPlaisir("Menu Copieux")).construireMenu()
+        );
+
+        for (Produit menu : menus) {
+            restaurant.ajouterProduit(menu);
+        }
+    }
+
+    private static void ajouterTablesAuRestaurant(Restaurant restaurant) {
+        restaurant.tables.clear();
+        List<Table> tables = List.of(
+                new Table("Sophie", new Date(), TableType.VEGAN, new TaxationPrive()),
+                new Table("Bob", new Date(), TableType.PLAISIR, new TaxationEntreprise()),
+                new Table("Charlie", Date.from(LocalDate.of(2024, 10, 16)
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant()), TableType.PLAISIR, new TaxationEntreprise())
+        );
+
+        for (Table table : tables) {
+            restaurant.ajouterTable(table);
+        }
+    }
+
+    private static void gererTables(Restaurant restaurant) {
+        for (Table table : restaurant.tables) {
+            table.ajouterProduit(restaurant.produits.get(restaurant.tables.indexOf(table)));
+            table.getEtatDeLaTable().accueillirClient(table);
+            table.getEtatDeLaTable().servirProduits(table);
+            table.getEtatDeLaTable().fermer(table);
+        }
     }
 
 }
