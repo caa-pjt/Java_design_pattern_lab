@@ -117,16 +117,16 @@ public final class Recette implements Subscriber<Table>, RecetteIterateur {
 
     @Override
     public Iterator<Table> recetteIterateurParMois(int month) {
-        return new RecetteIteratorParMois(this, month);
+        return new RecetteIteratorParMois(this.historiqueTablesCloturees, month);
     }
 
     @Override
     public Iterator<Table> recetteIteratorMontantSuperieurA50() {
-        return new RecetteIteratorMontantSuperieurA50(this);
+        return new RecetteIteratorMontantSuperieurA50(this.historiqueTablesCloturees);
     }
 
     @Override
     public Iterateur<Table> recetteIterateurMontantSuperieurMontant(double montant) {
-        return new RecetteIterateurMontantSuperieurMontant(this, montant);
+        return new RecetteIterateurMontantSuperieurMontant(this.historiqueTablesCloturees, montant);
     }
 }

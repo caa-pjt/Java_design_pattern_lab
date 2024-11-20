@@ -1,6 +1,5 @@
 package com.carlosantunes.restaurant.iterateurs;
 
-import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.Table;
 
 import java.util.List;
@@ -14,9 +13,9 @@ public class RecetteIteratorMontantSuperieurA50 implements Iterateur<Table> {
     private int index;
     private final List<Table> tableList;
 
-    public RecetteIteratorMontantSuperieurA50(Recette recette) {
+    public RecetteIteratorMontantSuperieurA50(List<Table> tables) {
         this.index = 0;
-        this.tableList = recette.getListeTablesCloturees();
+        this.tableList = tables;
     }
 
     @Override

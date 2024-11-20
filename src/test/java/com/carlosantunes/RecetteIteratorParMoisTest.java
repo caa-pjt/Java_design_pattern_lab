@@ -43,14 +43,14 @@ class RecetteIteratorParMoisTest {
 
     @Test
     void testHasNext_ReturnsTrueWhenValidElement() {
-        RecetteIteratorParMois iterator = new RecetteIteratorParMois(recette, 1);
+        RecetteIteratorParMois iterator = new RecetteIteratorParMois(recette.getListeTablesCloturees(), 1);
 
         assertTrue(iterator.hasNext());  // Le premier élément correspond au mois 1
     }
 
     @Test
     void testNext_ReturnsTableForGivenMonth() {
-        RecetteIteratorParMois iterator = new RecetteIteratorParMois(recette, 1);
+        RecetteIteratorParMois iterator = new RecetteIteratorParMois(recette.getListeTablesCloturees(), 1);
 
         Table table = iterator.next();
         Assertions.assertEquals(1, table.getLocalDate().getMonthValue()); // Mois 1
@@ -61,7 +61,7 @@ class RecetteIteratorParMoisTest {
 
     @Test
     void testNext_ThrowsExceptionWhenNoMoreTablesForMonth() {
-        RecetteIteratorParMois iterator = new RecetteIteratorParMois(recette, 1);
+        RecetteIteratorParMois iterator = new RecetteIteratorParMois(recette.getListeTablesCloturees(), 1);
 
         iterator.next(); // Mois 1
         iterator.next(); // Mois 1

@@ -48,14 +48,14 @@ class RecetteIteratorMontantSuperieurA50Test {
 
     @Test
     void testHasNext_ReturnsTrueWhenValidElement() {
-        RecetteIteratorMontantSuperieurA50 iterator = new RecetteIteratorMontantSuperieurA50(recette);
+        RecetteIteratorMontantSuperieurA50 iterator = new RecetteIteratorMontantSuperieurA50(recette.getListeTablesCloturees());
 
         assertTrue(iterator.hasNext());  // Le premier élément a un montant > 50
     }
 
     @Test
     void testNext_ReturnsTableWithAmountGreaterThan50() {
-        RecetteIteratorMontantSuperieurA50 iterator = new RecetteIteratorMontantSuperieurA50(recette);
+        RecetteIteratorMontantSuperieurA50 iterator = new RecetteIteratorMontantSuperieurA50(recette.getListeTablesCloturees());
 
         Table table = iterator.next();
         assertEquals(60, table.getMontant());
@@ -66,7 +66,7 @@ class RecetteIteratorMontantSuperieurA50Test {
 
     @Test
     void testNext_ThrowsExceptionWhenNoMoreValidElements() {
-        RecetteIteratorMontantSuperieurA50 iterator = new RecetteIteratorMontantSuperieurA50(recette);
+        RecetteIteratorMontantSuperieurA50 iterator = new RecetteIteratorMontantSuperieurA50(recette.getListeTablesCloturees());
 
         iterator.next(); // 60 CHF
         iterator.next(); // 70 CHF

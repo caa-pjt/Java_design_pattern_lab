@@ -1,6 +1,5 @@
 package com.carlosantunes.restaurant.iterateurs;
 
-import com.carlosantunes.restaurant.Recette;
 import com.carlosantunes.restaurant.Table;
 
 import java.util.List;
@@ -11,8 +10,8 @@ public class RecetteIteratorParMois implements Iterateur<Table> {
     private int index;
     List<Table> tableList;
 
-    public RecetteIteratorParMois(Recette recette, int month) {
-        this.tableList = recette.getListeTablesCloturees();
+    public RecetteIteratorParMois(List<Table> tables, int month) {
+        this.tableList = tables;
         this.month = month;
         this.index = 0;
     }
