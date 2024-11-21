@@ -52,6 +52,6 @@ public class Plat implements Produit {
 
     @Override
     public void exporter(Visiteur visiteur) {
-        visiteur.visiter(this);
+        visiteur.visiterPlat(this);
     }
 }

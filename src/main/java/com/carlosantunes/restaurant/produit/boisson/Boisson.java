@@ -54,6 +54,6 @@ public class Boisson implements Produit {
 
     @Override
     public void exporter(Visiteur visiteur) {
-        visiteur.visiter(this);
+        visiteur.visiterBoisson(this);
     }
 }

@@ -89,7 +89,8 @@ public class Menu implements Produit {
 
     @Override
     public void exporter(Visiteur visiteur) {
-        visiteur.visiter(this);
+        visiteur.visiterMenu(this);
+        // Exporter chaque produit du menu
         for (Produit produit : produits) {
             produit.exporter(visiteur);
         }

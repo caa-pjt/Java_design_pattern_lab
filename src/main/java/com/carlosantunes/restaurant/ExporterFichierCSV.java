@@ -1,6 +1,5 @@
 package com.carlosantunes.restaurant;
 
-import com.carlosantunes.restaurant.decorateur.ProduitDecorateur;
 import com.carlosantunes.restaurant.produit.Menu;
 import com.carlosantunes.restaurant.produit.boisson.Boisson;
 import com.carlosantunes.restaurant.produit.plat.Plat;
@@ -23,25 +22,27 @@ public class ExporterFichierCSV implements Visiteur, AutoCloseable {
 
 
     @Override
-    public void visiter(Boisson boisson) {
+    public void visiterBoisson(Boisson boisson) {
         exporter(boisson.getNom(), boisson.getPrix(), boisson.getType());
     }
 
     @Override
-    public void visiter(Plat plat) {
+    public void visiterPlat(Plat plat) {
         exporter(plat.getNom(), plat.getPrix(), plat.getType());
     }
 
     @Override
-    public void visiter(Menu menu) {
+    public void visiterMenu(Menu menu) {
         exporter(menu.getNom(), menu.getPrix(), menu.getType());
     }
 
-    @Override
-    public void visiter(ProduitDecorateur produitDecorateur) {
-        exporter(produitDecorateur.getNom(), produitDecorateur.getPrix(), produitDecorateur.getType());
-    }
-
+    /**
+     * Exporte une ligne dans le fichier CSV.
+     *
+     * @param nom  Le nom du produit.
+     * @param prix Le prix du produit.
+     * @param type Le type du produit.
+     */
     private void exporter(String nom, double prix, String type) {
         try {
             this.writer.append(nom)

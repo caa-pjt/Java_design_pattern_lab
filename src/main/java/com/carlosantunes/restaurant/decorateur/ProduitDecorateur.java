@@ -1,6 +1,5 @@
 package com.carlosantunes.restaurant.decorateur;
 
-import com.carlosantunes.restaurant.Visiteur;
 import com.carlosantunes.restaurant.produit.Produit;
 
 public abstract class ProduitDecorateur implements Produit {
@@ -28,8 +27,5 @@ public abstract class ProduitDecorateur implements Produit {
         produit.afficher();
     }
 
-    @Override
-    public void exporter(Visiteur visiteur) {
-        visiteur.visiter(this);
-    }
+
 }
