@@ -1,5 +1,6 @@
 package com.carlosantunes.restaurant.produit.plat;
 
+import com.carlosantunes.restaurant.Visiteur;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.produit.Produit;
 
@@ -47,5 +48,10 @@ public class Plat implements Produit {
                 "nom : '" + getNom() + '\'' +
                 ", type : " + getType() +
                 ", prix : " + getPrix() + " CHF");
+    }
+
+    @Override
+    public void exporter(Visiteur visiteur) {
+        visiteur.visiter(this);
     }
 }

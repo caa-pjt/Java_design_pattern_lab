@@ -1,6 +1,7 @@
 package com.carlosantunes;
 
 import com.carlosantunes.restaurant.Recette;
+import com.carlosantunes.restaurant.Statistique;
 import com.carlosantunes.restaurant.Table;
 import com.carlosantunes.restaurant.TableFactory;
 import com.carlosantunes.restaurant.builder.*;
@@ -164,7 +165,48 @@ public class Restaurant {
         // tache8(restaurant);
 
         // Lab 5 - Tache 1 : Iterator pattern
-        tache9(restaurant);
+        // tache9(restaurant);
+
+        // Lab 5 - Tache 2 : Visitor pattern
+        tache10(restaurant);
+    }
+
+    /**
+     * Lab 5 - Tâche 2 : Visitor pattern
+     * 1. Création de menus Diet, Plaisir et Vegan selon le Builder pattern Normal et Copieux
+     * 2. Ajout des menus au restaurant
+     * 3. Création de tables privées et d'entreprise
+     * 4. Ajout des menus aux tables
+     * 5. Changement d'état des tables : Réservée, Servie, Clôturée
+     * 6. Utilisation du pattern Visitor pour afficher les statistiques des produits consommés
+     * 7. Exportation des statistiques des produits consommés dans un fichier CSV
+     */
+    private static void tache10(Restaurant restaurant) {
+
+        System.out.println("----------------------------------------");
+        System.out.println("Tâche 10: Visitor pattern :");
+        System.out.println("----------------------------------------");
+
+        Statistique stats = Statistique.getInstance();
+
+        ajouterMenusAuRestaurant(restaurant);
+
+        ajouterTablesAuRestaurant(restaurant);
+
+        gererTables(restaurant);
+
+        stats.addProduit(new Plat("Steak saignant", 12.00, PlatType.RICHE));
+        stats.addProduit(new Boisson("Bière Blonde", 2.50, BoissonType.ALCOOLISEE));
+
+        // Ajoutez des produits aux statistiques
+        restaurant.tables.forEach(table -> table.getProduitsConsommes().forEach(stats::addProduit));
+
+        System.out.println("Nombre de produits consommés : " + stats.getNombreProduitsConsommes());
+        System.out.println("Montant total des produits consommés : " + stats.getMontantTotal());
+
+        // Exportation des statistiques des produits consommés dans un fichier CSV
+        stats.exporterProduits("statistiques.csv");
+
     }
 
     /*

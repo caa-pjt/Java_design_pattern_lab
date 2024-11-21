@@ -1,5 +1,6 @@
 package com.carlosantunes.restaurant.produit;
 
+import com.carlosantunes.restaurant.Visiteur;
 import com.carlosantunes.restaurant.enums.MenuType;
 
 import java.math.BigDecimal;
@@ -12,7 +13,7 @@ import java.util.List;
  * représente un menu composé de plusieurs produits.
  * Implémente l'interface Produit et agit comme un composite qui peut contenir des plats, des boissons ou d'autres menus.
  */
-public class Menu implements Produit{
+public class Menu implements Produit {
 
     private final String nom;
     private final MenuType type;
@@ -34,6 +35,7 @@ public class Menu implements Produit{
      *
      * @param produit Le produit à ajouter au menu (peut être un Plat, une Boisson ou même un autre Menu).
      */
+    @Override
     public void ajouterProduit(Produit produit) {
         produits.add(produit);
     }
@@ -54,7 +56,8 @@ public class Menu implements Produit{
         for (Produit produit : produits) {
             prix += produit.getPrix();
         }
-        return new BigDecimal(prix).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        BigDecimal bd = BigDecimal.valueOf(prix);
+        return bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     @Override
@@ -82,6 +85,14 @@ public class Menu implements Produit{
      */
     public List<Produit> getProduits() {
         return produits;
+    }
+
+    @Override
+    public void exporter(Visiteur visiteur) {
+        visiteur.visiter(this);
+        for (Produit produit : produits) {
+            produit.exporter(visiteur);
+        }
     }
 
 }

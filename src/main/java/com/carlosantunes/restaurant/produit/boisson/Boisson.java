@@ -1,5 +1,6 @@
 package com.carlosantunes.restaurant.produit.boisson;
 
+import com.carlosantunes.restaurant.Visiteur;
 import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.produit.Produit;
 
@@ -49,5 +50,10 @@ public class Boisson implements Produit {
                 "nom : '" + getNom() + '\'' +
                 ", type : " + getType() +
                 ", prix : " + getPrix() + " CHF");
+    }
+
+    @Override
+    public void exporter(Visiteur visiteur) {
+        visiteur.visiter(this);
     }
 }
