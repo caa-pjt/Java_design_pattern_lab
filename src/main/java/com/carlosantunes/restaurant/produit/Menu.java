@@ -3,6 +3,8 @@ package com.carlosantunes.restaurant.produit;
 import com.carlosantunes.restaurant.Visiteur;
 import com.carlosantunes.restaurant.enums.MenuType;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -88,11 +90,23 @@ public class Menu implements Produit {
     }
 
     @Override
-    public void exporter(Visiteur visiteur) {
+    public void accepter(Visiteur visiteur) {
         visiteur.visiterMenu(this);
-        // Exporter chaque produit du menu
-        for (Produit produit : produits) {
-            produit.exporter(visiteur);
+    }
+
+    public void visiterMenu(String cheminFichier) {
+        try (FileWriter writer = new FileWriter(cheminFichier, true)) {
+            writer.append(getNom())
+                    .append(",")
+                    .append(Double.toString(getPrix()))
+                    .append(",")
+                    .append(getType())
+                    .append("\n");
+            writer.flush();
+            writer.close();
+            System.out.println("Menu exportée : " + getNom());
+        } catch (IOException e) {
+            System.err.println("Erreur lors de l'exportation du menu : " + e.getMessage());
         }
     }
 

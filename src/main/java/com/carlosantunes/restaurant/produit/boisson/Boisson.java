@@ -4,6 +4,9 @@ import com.carlosantunes.restaurant.Visiteur;
 import com.carlosantunes.restaurant.enums.BoissonType;
 import com.carlosantunes.restaurant.produit.Produit;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * Classe Boisson qui représente une boisson servie dans le restaurant.
  * Implémente l'interface Produit et doit fournir des détails sur la boisson.
@@ -53,7 +56,23 @@ public class Boisson implements Produit {
     }
 
     @Override
-    public void exporter(Visiteur visiteur) {
+    public void accepter(Visiteur visiteur) {
         visiteur.visiterBoisson(this);
+    }
+
+    public void exportBoisson(String cheminFichier) {
+        try (FileWriter writer = new FileWriter(cheminFichier, true)) {
+            writer.append(getNom())
+                    .append(",")
+                    .append(Double.toString(getPrix()))
+                    .append(",")
+                    .append(getType())
+                    .append("\n");
+            writer.flush();
+            writer.close();
+            System.out.println("Boisson exportée : " + getNom());
+        } catch (IOException e) {
+            System.err.println("Erreur lors de l'exportation de la boisson : " + e.getMessage());
+        }
     }
 }

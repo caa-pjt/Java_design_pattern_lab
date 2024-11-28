@@ -47,7 +47,7 @@ public interface Produit {
      *
      * @param visiteur Le visiteur qui exporte le produit.
      */
-    default void exporter(Visiteur visiteur) {
+    default void accepter(Visiteur visiteur) {
         throw new UnsupportedOperationException("Impossible d'exporter ce produit.");
     }
 }

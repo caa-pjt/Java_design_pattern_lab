@@ -4,6 +4,9 @@ import com.carlosantunes.restaurant.Visiteur;
 import com.carlosantunes.restaurant.enums.PlatType;
 import com.carlosantunes.restaurant.produit.Produit;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * Classe Plat qui représente un plat servi dans le restaurant.
  * Implémente l'interface Produit et doit fournir des détails sur le plat.
@@ -51,7 +54,23 @@ public class Plat implements Produit {
     }
 
     @Override
-    public void exporter(Visiteur visiteur) {
+    public void accepter(Visiteur visiteur) {
         visiteur.visiterPlat(this);
+    }
+
+    public void exportPlat(String cheminFichier) {
+        try (FileWriter writer = new FileWriter(cheminFichier, true)) {
+            writer.append(getNom())
+                    .append(",")
+                    .append(Double.toString(getPrix()))
+                    .append(",")
+                    .append(getType())
+                    .append("\n");
+            writer.flush();
+            writer.close();
+            System.out.println("Plat exportée : " + getNom());
+        } catch (IOException e) {
+            System.err.println("Erreur lors de l'exportation du plat : " + e.getMessage());
+        }
     }
 }

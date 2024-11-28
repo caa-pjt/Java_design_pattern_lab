@@ -35,12 +35,13 @@ public final class Statistique {
     /**
      * Exporte les produits consommés dans un fichier CSV.
      *
-     * @param filePath Le chemin du fichier CSV.
+     * @param nomFichier du fichier CSV.
      */
-    public synchronized void exporterProduits(String filePath) {
-        try (ExporterFichierCSV exporter = new ExporterFichierCSV(filePath)) {
-            System.out.println("Exportation des produits consommés..." + produitsConsommes.size() + " produits à exporter.");
-            produitsConsommes.forEach(produit -> produit.exporter(exporter));
+    public synchronized void exporterProduits(String nomFichier) {
+        Visiteur visiteur = new ExporterFichierCSV(nomFichier);
+        System.out.println("Exportation des produits consommés..." + produitsConsommes.size() + " produits à exporter.");
+        for (Produit produit : produitsConsommes) {
+            produit.accepter(visiteur);
         }
     }
 }
